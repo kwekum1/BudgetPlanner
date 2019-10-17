@@ -1,5 +1,5 @@
 <template>
-  <div class="HousingExpensesDiv container">
+  <div class="HousingExpensesDiv form-group">
     <h3>Housing Expenses</h3>
     <table class="table">
       <tr>
@@ -7,7 +7,7 @@
           <label>Mortgage/Rent</label>
         </td>
         <td>
-          <input type="form-control" v-model="MortgageRent" />
+          <input class="form-control" v-model="MortgageRent" />
         </td>
       </tr>
       <tr>
@@ -15,7 +15,7 @@
           <label>Property Taxes</label>
         </td>
         <td>
-          <input type="form-control" v-model="PropertyTaxes" />
+          <input class="form-control" v-model="PropertyTaxes" />
         </td>
       </tr>
       <tr>
@@ -23,7 +23,7 @@
           <label>Home Maintence</label>
         </td>
         <td>
-          <input type="form-control" v-model="HomeMaintence" />
+          <input class="form-control" v-model="HomeMaintence" />
         </td>
       </tr>
       <tr>
@@ -31,7 +31,7 @@
           <label>Home Owners Insurance</label>
         </td>
         <td>
-          <input type="form-control" v-model="HomeOwnersInsurance" />
+          <input class="form-control" v-model="HomeOwnersInsurance" />
         </td>
       </tr>
       <tr>
@@ -39,22 +39,20 @@
           <label>Home Utilities</label>
         </td>
         <td>
-          <input type="form-control" v-model="HomeUtilities" />
+          <input class="form-control" v-model="HomeUtilities" />
         </td>
       </tr>
     </table>
-    <button class="btn btn-warning" v-on:click="ResetHousingExpenses()">Reset Housing Expenses</button>
+    <button class="btn btn-primary" v-on:click="ResetHousingExpenses()">Reset Housing Expenses</button>
 
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <!--  <div class="alert alert-success alert-dismissible fade show" role="alert">
       With Bootstrap!
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-    </div>
+    </div>-->
 
     <h2>{{HousingExpenseTotal | toCurrency}}</h2>
-    <h3>TS Counter {{count}}</h3>
-    <button @click="increment()">INCREMENT</button>
   </div>
 </template>
 
@@ -70,19 +68,14 @@ export default class HousingExpenses extends Vue {
   HomeUtilities: string = "";
 
   get HousingExpenseTotal(): number {
-    var total: number = (
+    var total: number =
       +this.VerifyFloat(this.MortgageRent) +
       +this.VerifyFloat(this.PropertyTaxes) +
       +this.VerifyFloat(this.HomeMaintence) +
       +this.VerifyFloat(this.HomeOwnersInsurance) +
-      +this.VerifyFloat(this.HomeUtilities)
-    );
+      +this.VerifyFloat(this.HomeUtilities);
     this.Submit(total);
     return total;
-  }
-  count = 0;
-  increment() {
-    this.count++;
   }
 
   VerifyFloat(CaptureNumber: string) {
@@ -96,12 +89,12 @@ export default class HousingExpenses extends Vue {
     this.$emit("inputData", totalSum);
   }
 
-  ResetHousingExpenses(){
-        this.MortgageRent = "";
-  this.PropertyTaxes = "";
-  this.HomeMaintence = "";
-  this.HomeOwnersInsurance = "";
-  this.HomeUtilities = "";
+  ResetHousingExpenses() {
+    this.MortgageRent = "";
+    this.PropertyTaxes = "";
+    this.HomeMaintence = "";
+    this.HomeOwnersInsurance = "";
+    this.HomeUtilities = "";
   }
 }
 </script>
