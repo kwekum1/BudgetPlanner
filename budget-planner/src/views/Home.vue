@@ -20,6 +20,23 @@
       <div class="col-lg-4">
         <housing-expenses @inputData="updateHousing" />
         <transportation-expenses @inputData="updateTransportation" />
+        <br />
+        <br />
+        <hr />
+        <p>Total Monthly Expenses: {{totalBudgetCost | toCurrency}}</p>
+        <hr />
+        <p>
+          Net Monthly Income:
+          <input
+            class="text-line"
+            placeholder="(Insert Here)"
+            v-model="incomeInput"
+          />
+        </p>
+        <hr />
+        <div class="alert alert-success" v-bind:class="{ 'alert-success': totalSurplusDeficit > 0, 'alert-danger': totalSurplusDeficit < 0, 'alert-warning': totalSurplusDeficit == 0  }">
+          <p>TOTAL SURPLUS/DEFICIT: {{totalSurplusDeficit | toCurrency}}</p>
+        </div>
       </div>
       <div class="col-lg-3">
         <healthcare-insurance-expenses @inputData="updateHealth" />
@@ -27,6 +44,8 @@
       </div>
       <div class="col-lg-3">
         <discretionary-expenses @inputData="updateDiscretionary" />
+        <br />
+        <saving-and-investing-expenses @inputData="updateSavings" />
       </div>
       <div class="col-lg-1"></div>
     </div>
@@ -41,16 +60,19 @@ import TransportationExpenses from "@/components/TransportationExpenses.vue";
 import HealthcareInsuranceExpenses from "@/components/HealthcareInsuranceExpenses.vue";
 import HouseholdPersonalExpenses from "@/components/HouseholdPersonalExpenses.vue";
 import DiscretionaryExpenses from "@/components/DiscretionaryExpenses.vue";
+import SavingAndInvestingExpenses from "@/components/SavingAndInvesting.vue";
 
 export default {
   name: "home",
   data() {
     return {
+      incomeInput: "",
       HousingExpensesAmount: 0,
       TransportationExpensesAmount: 0,
       HealthcareInsuranceExpensesAmount: 0,
       HouseholdPersonalExpensesAmount: 0,
-      DiscretionaryExpensesAmount: 0
+      DiscretionaryExpensesAmount: 0,
+      SavingAndInvestingAmount: 0
     };
   },
   computed: {
@@ -60,8 +82,12 @@ export default {
         +this.TransportationExpensesAmount +
         +this.HealthcareInsuranceExpensesAmount +
         +this.HouseholdPersonalExpensesAmount +
-        +this.DiscretionaryExpensesAmount
+        +this.DiscretionaryExpensesAmount +
+        +this.SavingAndInvestingAmount
       );
+    },
+    totalSurplusDeficit: function() {
+      return +this.incomeInput - +this.totalBudgetCost;
     }
   },
   components: {
@@ -69,7 +95,8 @@ export default {
     HousingExpenses,
     HealthcareInsuranceExpenses,
     HouseholdPersonalExpenses,
-    DiscretionaryExpenses
+    DiscretionaryExpenses,
+    SavingAndInvestingExpenses
   },
   methods: {
     updateHousing(variable) {
@@ -86,6 +113,15 @@ export default {
     },
     updateDiscretionary(variable) {
       this.DiscretionaryExpensesAmount = variable;
+    },
+    updateSavings(variable) {
+      this.SavingAndInvestingAmount = variable;
+    },
+    VerifyFloat(CaptureNumber) {
+      var amount;
+      if (Number.isNaN(Number.parseFloat(CaptureNumber))) amount = 0;
+      else amount = Number.parseFloat(CaptureNumber);
+      return amount;
     }
   }
 };

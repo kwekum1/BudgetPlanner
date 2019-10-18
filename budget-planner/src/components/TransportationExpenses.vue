@@ -51,19 +51,13 @@
         </td>
       </tr>
     </table>
-    <button
-      class="btn btn-warning"
-      v-on:click="ResetTransportationExpenses()"
-    >Reset Transportation Expenses</button>
-
-    <div class="alert alert-success alert-dismissible fade" role="alert">
-      With Bootstrap!
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-
-    <h2>{{TransportationExpenseTotal | toCurrency}}</h2>
+    <span>
+      <b style="padding-right:2em; font-size: 2em">{{TransportationExpenseTotal | toCurrency}}</b>
+      <button
+        class="btn btn-light btn-sm"
+        v-on:click="ResetTransportationExpenses()"
+      >Reset Transportation Expenses</button>
+    </span>
   </div>
 </template>
 

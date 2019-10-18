@@ -43,7 +43,9 @@
         </td>
       </tr>
     </table>
-    <button class="btn btn-primary" v-on:click="ResetHousingExpenses()">Reset Housing Expenses</button>
+    <span>
+          <b style="padding-right:2em; font-size: 2em">{{HousingExpenseTotal | toCurrency}}</b>
+    <button class="btn btn-light btn-sm" v-on:click="ResetHousingExpenses()">Reset Housing Expenses</button>
 
     <!--  <div class="alert alert-success alert-dismissible fade show" role="alert">
       With Bootstrap!
@@ -52,7 +54,8 @@
       </button>
     </div>-->
 
-    <h2>{{HousingExpenseTotal | toCurrency}}</h2>
+
+    </span>
   </div>
 </template>
 

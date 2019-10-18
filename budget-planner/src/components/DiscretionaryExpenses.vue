@@ -99,12 +99,13 @@
         </td>
       </tr>
     </table>
-    <button
-      class="btn btn-warning"
-      v-on:click="ResetDiscretionaryExpenses()"
-    >Reset Discretionary Expenses</button>
-
-    <h2>{{DiscretionaryExpenseTotal | toCurrency}}</h2>
+    <span>
+      <b style="padding-right:2em; font-size: 2em">{{DiscretionaryExpenseTotal | toCurrency}}</b>
+      <button
+        class="btn btn-light btn-sm"
+        v-on:click="ResetDiscretionaryExpenses()"
+      >Reset Discretionary Expenses</button>
+    </span>
   </div>
 </template>
 
@@ -160,18 +161,18 @@ export default class DiscretionaryExpenses extends Vue {
   }
 
   ResetDiscretionaryExpenses() {
-      this.CablePhoneInternet = "";
-      this.DiningOut = "";
-      this.RecClubDues = "";
-      this.MoviesAndEvents = "";
-      this.Hobbies = "";
-      this.Vacay = "";
-      this.Gifts = "";
-      this.Misc = "";
-      this.Other1 = "";
-      this.Other2 = "";
-      this.Other3 = "";
-      this.Other4 = "";
+    this.CablePhoneInternet = "";
+    this.DiningOut = "";
+    this.RecClubDues = "";
+    this.MoviesAndEvents = "";
+    this.Hobbies = "";
+    this.Vacay = "";
+    this.Gifts = "";
+    this.Misc = "";
+    this.Other1 = "";
+    this.Other2 = "";
+    this.Other3 = "";
+    this.Other4 = "";
   }
 }
 </script>

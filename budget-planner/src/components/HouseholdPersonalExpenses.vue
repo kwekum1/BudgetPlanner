@@ -51,12 +51,13 @@
         </td>
       </tr>
     </table>
-    <button
-      class="btn btn-warning"
-      v-on:click="ResetHouseholdandPersonalExpenses()"
-    >Reset Household Expenses</button>
-
-    <h2>{{HouseholdandPersonalExpenseTotal | toCurrency}}</h2>
+        <span>
+      <b style="padding-right:2em; font-size: 2em">{{HouseholdandPersonalExpenseTotal | toCurrency}}</b>
+      <button
+        class="btn btn-light btn-sm"
+        v-on:click="ResetHouseholdandPersonalExpenses()"
+      >Reset Household Expenses</button>
+    </span>
   </div>
 </template>
 
