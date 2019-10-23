@@ -3,7 +3,12 @@
     <img alt="Vue logo" src="../assets/logo.png" />
     <h1>Total: {{totalBudgetCost | toCurrency}}</h1>
     <!--<HelloWorld msg="Welcome to Your Vue.js Application" />-->
-
+    <div class="row">
+      <div class="col-lg-4">
+        <chart-display :charttype="chartType" :chartdata="computedChartData" />
+      </div>
+      <div class="col-lg-4"></div>
+    </div>
     <div class="row">
       <div class="col-lg-1" />
       <div class="col-lg-7">
@@ -34,7 +39,10 @@
           />
         </p>
         <hr />
-        <div class="alert alert-success" v-bind:class="{ 'alert-success': totalSurplusDeficit > 0, 'alert-danger': totalSurplusDeficit < 0, 'alert-warning': totalSurplusDeficit == 0  }">
+        <div
+          class="alert alert-success"
+          v-bind:class="{ 'alert-success': totalSurplusDeficit > 0, 'alert-danger': totalSurplusDeficit < 0, 'alert-warning': totalSurplusDeficit == 0  }"
+        >
           <p>TOTAL SURPLUS/DEFICIT: {{totalSurplusDeficit | toCurrency}}</p>
         </div>
       </div>
@@ -61,11 +69,14 @@ import HealthcareInsuranceExpenses from "@/components/HealthcareInsuranceExpense
 import HouseholdPersonalExpenses from "@/components/HouseholdPersonalExpenses.vue";
 import DiscretionaryExpenses from "@/components/DiscretionaryExpenses.vue";
 import SavingAndInvestingExpenses from "@/components/SavingAndInvesting.vue";
+import chart from "@/components/chart.vue";
+import ChartDisplay from "@/components/ChartDisplay.vue";
 
 export default {
   name: "home",
   data() {
     return {
+      chartType: "Pie",
       incomeInput: "",
       HousingExpensesAmount: 0,
       TransportationExpensesAmount: 0,
@@ -76,7 +87,7 @@ export default {
     };
   },
   computed: {
-    totalBudgetCost: function() {
+    totalBudgetCost: function() {      
       return (
         +this.HousingExpensesAmount +
         +this.TransportationExpensesAmount +
@@ -88,6 +99,10 @@ export default {
     },
     totalSurplusDeficit: function() {
       return +this.incomeInput - +this.totalBudgetCost;
+    },
+    computedChartData: function() {
+      return [this.HousingExpensesAmount,this.TransportationExpensesAmount,this.HealthcareInsuranceExpensesAmount,this.HouseholdPersonalExpensesAmount,this.DiscretionaryExpensesAmount,
+      this.SavingAndInvestingAmount];
     }
   },
   components: {
@@ -96,7 +111,8 @@ export default {
     HealthcareInsuranceExpenses,
     HouseholdPersonalExpenses,
     DiscretionaryExpenses,
-    SavingAndInvestingExpenses
+    SavingAndInvestingExpenses,
+    ChartDisplay
   },
   methods: {
     updateHousing(variable) {
