@@ -12,18 +12,34 @@
       :chart-data="datacollection"
       :options="options"
     ></doughnut-chart>
+    <bar-chart
+      v-if="charttype === 'Bar'"
+      :height="200"
+      :chart-data="datacollection"
+      :options="options"
+    ></bar-chart>
+    <polar-area
+      v-if="charttype === 'PolarArea'"
+      :height="200"
+      :chart-data="datacollection"
+      :options="options"
+    ></polar-area>
   </div>
 </template>
 
 <script>
 import LineChart from "./ChartTypes/LineChart.js";
 import DoughnutChart from "./ChartTypes/DoughnutChart.js";
+import BarChart from "./ChartTypes/BarChart.js";
+import PolarArea from "./ChartTypes/PolarArea";
 
 export default {
   name: "ChartDisplay",
   components: {
     LineChart,
-    DoughnutChart
+    DoughnutChart,
+    BarChart,
+    PolarArea
   },
   props: ["charttype", "chartdata"],
   data() {
@@ -80,10 +96,14 @@ export default {
         tooltips: {
           callbacks: {
             label: function(tooltipItem, data) {
+
+              const sum = data.datasets[tooltipItem.datasetIndex].data.reduce((total, n) => total + n, 0);
+
+
               var label = data.labels[tooltipItem.index];
-              var value =
-                data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-              return label + ": $" + value;
+              var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+              var percentage = ((value /  sum)* 100).toFixed(2);
+              return label + ": $" + value + " | " + percentage + "% of budget";
             }
           }
         }

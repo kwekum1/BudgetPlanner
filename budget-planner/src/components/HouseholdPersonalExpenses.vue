@@ -5,7 +5,7 @@
       <tr v-for="item in TemplateBudgetExpenses" v-bind:key="item.Id">
         <td>{{item.ExpenseTitle}}</td>
         <td>
-          <input class="form-control" v-model="item.BudgetPrice" />
+          <input class="form-control" type="number" v-model="item.BudgetPrice" />
         </td>
       </tr>
       <tr v-for="item in UserBudgetExpenses" v-bind:key="item.Id">
@@ -13,7 +13,7 @@
           <input placeholder="(Name of Expense)" v-model="item.ExpenseTitle" />
         </td>
         <td>
-          <input class="form-control" v-model="item.BudgetPrice" />
+          <input class="form-control" type="number" v-model="item.BudgetPrice" />
         </td>
         <td>
           <font-awesome-icon v-on:click="RemoveItem(item)" style="cursor: pointer" icon="trash" />

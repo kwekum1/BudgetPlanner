@@ -5,9 +5,14 @@
     <!--<HelloWorld msg="Welcome to Your Vue.js Application" />-->
     <div class="row">
       <div class="col-lg-4">
-        <chart-display :charttype="chartType" :chartdata="computedChartData" />
+        <chart-display :charttype="pieChartType" :chartdata="computedChartData" />
       </div>
-      <div class="col-lg-4"></div>
+      <div class="col-lg-4">
+        <chart-display :charttype="barChartType" :chartdata="computedChartData" />
+      </div>
+            <div class="col-lg-4">
+        <chart-display :charttype="polarAreaChartType" :chartdata="computedChartData" />
+      </div>
     </div>
     <div class="row">
       <div class="col-lg-1" />
@@ -76,7 +81,9 @@ export default {
   name: "home",
   data() {
     return {
-      chartType: "Pie",
+      pieChartType: "Pie",
+      barChartType: "Bar",
+      polarAreaChartType: "PolarArea",
       incomeInput: "",
       HousingExpensesAmount: 0,
       TransportationExpensesAmount: 0,
@@ -101,7 +108,7 @@ export default {
       return +this.incomeInput - +this.totalBudgetCost;
     },
     computedChartData: function() {
-      return [this.HousingExpensesAmount,this.TransportationExpensesAmount,this.HealthcareInsuranceExpensesAmount,this.HouseholdPersonalExpensesAmount,this.DiscretionaryExpensesAmount,
+      return [this.HousingExpensesAmount,this.HealthcareInsuranceExpensesAmount,this.TransportationExpensesAmount,this.HouseholdPersonalExpensesAmount,this.DiscretionaryExpensesAmount,
       this.SavingAndInvestingAmount];
     }
   },
