@@ -51,12 +51,17 @@
         </td>
       </tr>
     </table>
+
     <span>
-      <b style="padding-right:2em; font-size: 2em">{{TransportationExpenseTotal | toCurrency}}</b>
+      <b style="padding-right:2em; font-size: 2em">{{
+        TransportationExpenseTotal | toCurrency
+      }}</b>
       <button
         class="btn btn-light btn-sm"
         v-on:click="ResetTransportationExpenses()"
-      >Reset Transportation Expenses</button>
+      >
+        Reset Transportation Expenses
+      </button>
     </span>
   </div>
 </template>

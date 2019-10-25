@@ -3,9 +3,13 @@
     <h3>Household and Personal Expenses</h3>
     <table class="table table-striped">
       <tr v-for="item in TemplateBudgetExpenses" v-bind:key="item.Id">
-        <td>{{item.ExpenseTitle}}</td>
+        <td>{{ item.ExpenseTitle }}</td>
         <td>
-          <input class="form-control" type="number" v-model="item.BudgetPrice" />
+          <input
+            class="form-control"
+            type="number"
+            v-model="item.BudgetPrice"
+          />
         </td>
       </tr>
       <tr v-for="item in UserBudgetExpenses" v-bind:key="item.Id">
@@ -13,24 +17,39 @@
           <input placeholder="(Name of Expense)" v-model="item.ExpenseTitle" />
         </td>
         <td>
-          <input class="form-control" type="number" v-model="item.BudgetPrice" />
+          <input
+            class="form-control"
+            type="number"
+            v-model="item.BudgetPrice"
+          />
         </td>
         <td>
-          <font-awesome-icon v-on:click="RemoveItem(item)" style="cursor: pointer" icon="trash" />
+          <font-awesome-icon
+            v-on:click="RemoveItem(item)"
+            style="cursor: pointer"
+            icon="trash"
+          />
         </td>
       </tr>
       <tr v-if="UserBudgetExpenses.length < 3">
         <td>
-          <button v-on:click="AddNewCustomExpense()">Add additional expense</button>
+          <button v-on:click="AddNewCustomExpense()">
+            Add additional expense
+          </button>
         </td>
       </tr>
     </table>
+
     <span>
-      <b style="padding-right:2em; font-size: 2em">{{CalculateTotal | toCurrency}}</b>
+      <b style="padding-right:2em; font-size: 2em">{{
+        CalculateTotal | toCurrency
+      }}</b>
       <button
         class="btn btn-light btn-sm"
         v-on:click="ResetHouseholdandPersonalExpenses()"
-      >Reset Household Expenses</button>
+      >
+        Reset Household Expenses
+      </button>
     </span>
   </div>
 </template>
@@ -62,8 +81,7 @@ class MyMixin extends Vue {
   }
 }
 
-
- class ExpenseItem {
+class ExpenseItem {
   constructor(
     id: number,
     expenseTitle: string,
@@ -80,7 +98,7 @@ class MyMixin extends Vue {
   ExpenseTitle: string = "";
   BudgetPrice: string = "";
   Template: boolean = false;
-//  ourChartData = planetChartData;
+  //  ourChartData = planetChartData;
 }
 
 @Component
@@ -96,9 +114,8 @@ export default class HouseholdandPersonalExpenses extends MyMixin {
       new ExpenseItem(4, "ProfessionalDues", "", true)
     );
     this.HouseholdExpenses.push(new ExpenseItem(5, "CellPhone", "", true));
-    this.HouseholdExpenses.push(new ExpenseItem(6, "Other", "", true));  
+    this.HouseholdExpenses.push(new ExpenseItem(6, "Other", "", true));
   }
-
 
   public HouseholdExpenses: ExpenseItem[] = [];
   NewCount: number = 30;
@@ -122,10 +139,9 @@ export default class HouseholdandPersonalExpenses extends MyMixin {
     );
   }
 
-
- // @Watch("HouseholdExpenses")
- // onPropertyChanged(value: string, oldValue: string) {
-    // Do stuff with the watcher here.r
+  // @Watch("HouseholdExpenses")
+  // onPropertyChanged(value: string, oldValue: string) {
+  // Do stuff with the watcher here.r
   //}
 
   get CalculateTotal(): number {

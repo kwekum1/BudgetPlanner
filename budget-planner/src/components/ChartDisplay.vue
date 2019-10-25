@@ -41,7 +41,7 @@ export default {
     BarChart,
     PolarArea
   },
-  props: ["charttype", "chartdata"],
+  props: ["charttype", "chartdata", "displayType", "chartlabels"],
   data() {
     return {
       datacollection: {},
@@ -60,14 +60,8 @@ export default {
   methods: {
     fillData() {
       this.datacollection = {
-        labels: [
-          "Housing",
-          "Healthcare Expenses",
-          "Transportation",
-          "Household/Personal Expenses",
-          "Discretionary",
-          "Savings & Investing"
-        ],
+        labels: this.chartlabels,
+        info: this.displayType,
         datasets: [
           {
             label: "Spending Chart",
@@ -77,7 +71,8 @@ export default {
               "#8987b9",
               "#45729e",
               "#d6ad24",
-              "#73d3e4"
+              "#73d3e4",
+              "#D4F586"
             ],
             data: this.chartdata
           }
@@ -96,14 +91,40 @@ export default {
         tooltips: {
           callbacks: {
             label: function(tooltipItem, data) {
+              var displayType = data.info;
+              if (displayType === "money") {
+                const sum = data.datasets[tooltipItem.datasetIndex].data.reduce(
+                  (total, n) => total + n,
+                  0
+                );
 
-              const sum = data.datasets[tooltipItem.datasetIndex].data.reduce((total, n) => total + n, 0);
+                var label = data.labels[tooltipItem.index];
+                var value =
+                  data.datasets[tooltipItem.datasetIndex].data[
+                    tooltipItem.index
+                  ];
+                var percentage = ((value / sum) * 100).toFixed(2);
+                return (
+                  label + ": $" + value + " | " + percentage + "% of spending"
+                );
+              } else if (displayType === "percent") {
+                var percentLabel = data.labels[tooltipItem.index];
+                var percentValue =
+                  data.datasets[tooltipItem.datasetIndex].data[
+                    tooltipItem.index
+                  ];
 
-
-              var label = data.labels[tooltipItem.index];
-              var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-              var percentage = ((value /  sum)* 100).toFixed(2);
-              return label + ": $" + value + " | " + percentage + "% of budget";
+                return (
+                  percentLabel + ": " + percentValue + "% of monthly income"
+                );
+              } else
+                return (
+                  data.labels[tooltipItem.index] +
+                  ": " +
+                  data.datasets[tooltipItem.datasetIndex].data[
+                    tooltipItem.index
+                  ]
+                );
             }
           }
         }

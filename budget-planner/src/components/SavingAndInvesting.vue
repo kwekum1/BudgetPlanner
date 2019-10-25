@@ -1,7 +1,8 @@
 <template>
   <div class="card">
     <div class="card-header bg-warning">
-      <h3>Saving And Investing</h3><h6>(20%)</h6>
+      <h3>Saving And Investing</h3>
+      <h6>(20%)</h6>
     </div>
     <div class="card-body">
       <div class="SavingAndInvesting">
@@ -55,12 +56,17 @@
             </td>
           </tr>
         </table>
+
         <span>
-          <b style="padding-right:2em; font-size: 2em">{{SavingAndInvestingTotal | toCurrency}}</b>
+          <b style="padding-right:2em; font-size: 2em">{{
+            SavingAndInvestingTotal | toCurrency
+          }}</b>
           <button
             class="btn btn-light btn-sm"
             v-on:click="ResetSavingAndInvesting()"
-          >Reset Saving And Investing</button>
+          >
+            Reset Saving And Investing
+          </button>
         </span>
       </div>
     </div>

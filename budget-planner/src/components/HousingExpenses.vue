@@ -43,18 +43,21 @@
         </td>
       </tr>
     </table>
-    <span>
-          <b style="padding-right:2em; font-size: 2em">{{HousingExpenseTotal | toCurrency}}</b>
-    <button class="btn btn-light btn-sm" v-on:click="ResetHousingExpenses()">Reset Housing Expenses</button>
 
-    <!--  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <span>
+      <b style="padding-right:2em; font-size: 2em">{{
+        HousingExpenseTotal | toCurrency
+      }}</b>
+      <button class="btn btn-light btn-sm" v-on:click="ResetHousingExpenses()">
+        Reset Housing Expenses
+      </button>
+
+      <!--  <div class="alert alert-success alert-dismissible fade show" role="alert">
       With Bootstrap!
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>-->
-
-
     </span>
   </div>
 </template>

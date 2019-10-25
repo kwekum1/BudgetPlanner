@@ -1,6 +1,6 @@
 <script lang="ts">
 //import { Component, Prop, Vue, Mixins } from "vue-property-decorator";
-import Component from 'vue-class-component'
+import Component from "vue-class-component";
 
 export default class ExpenseItem {
   constructor(
@@ -9,7 +9,7 @@ export default class ExpenseItem {
     budgetPrice: string,
     template: boolean
   ) {
-   // super();
+    // super();
     this.Id = id;
     this.ExpenseTitle = expenseTitle;
     this.BudgetPrice = budgetPrice;

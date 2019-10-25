@@ -4,12 +4,12 @@
   </div>
 </template>
 
-<script type = "text/javascript" >
+<script type="text/javascript">
 import Chart from "chart.js";
 import planetChartData from "./chart-data.js";
 
 export default {
-    name: "chart",
+  name: "chart",
   props: [],
   data() {
     return {

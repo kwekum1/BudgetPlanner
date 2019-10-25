@@ -99,12 +99,17 @@
         </td>
       </tr>
     </table>
+
     <span>
-      <b style="padding-right:2em; font-size: 2em">{{DiscretionaryExpenseTotal | toCurrency}}</b>
+      <b style="padding-right:2em; font-size: 2em">{{
+        DiscretionaryExpenseTotal | toCurrency
+      }}</b>
       <button
         class="btn btn-light btn-sm"
         v-on:click="ResetDiscretionaryExpenses()"
-      >Reset Discretionary Expenses</button>
+      >
+        Reset Discretionary Expenses
+      </button>
     </span>
   </div>
 </template>
