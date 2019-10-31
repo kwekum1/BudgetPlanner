@@ -1,14 +1,20 @@
 <template>
-  <div class="HouseholdandPersonalExpenses">
-    <h3>Household and Personal Expenses</h3>
+  <div v-bind:id="IdTitle" class="ExpensesCharter">
+    <h3>{{BudgetCategoryTitle}}</h3>
     <table class="table table-striped">
-      <tr v-for="item in $store.getters.TemplateBudgetExpenses" v-bind:key="item.Id">
+      <tr
+        v-for="item in $store.getters.TemplateBudgetExpenses(IdentifiedBudgetCategoryId)"
+        v-bind:key="item.Id"
+      >
         <td>{{ item.ExpenseTitle }}</td>
         <td>
           <input class="form-control" type="number" v-model="item.BudgetPrice" />
         </td>
       </tr>
-      <tr v-for="item in $store.getters.UserBudgetExpenses" v-bind:key="item.Id">
+      <tr
+        v-for="item in $store.getters.UserBudgetExpenses(IdentifiedBudgetCategoryId)"
+        v-bind:key="item.Id"
+      >
         <td>
           <input placeholder="(Name of Expense)" v-model="item.ExpenseTitle" />
         </td>
@@ -19,7 +25,7 @@
           <font-awesome-icon v-on:click="RemoveItem(item)" style="cursor: pointer" icon="trash" />
         </td>
       </tr>
-      <tr v-if="$store.getters.UserBudgetExpenses.length < 3">
+      <tr v-if="$store.getters.UserBudgetExpenses(IdentifiedBudgetCategoryId).length < 3">
         <td>
           <button v-on:click="AddNewCustomExpense()">Add additional expense</button>
         </td>
@@ -34,9 +40,11 @@
       </b>
       <button
         class="btn btn-light btn-sm"
-        v-on:click="ResetHouseholdandPersonalExpenses()"
-      >Reset Household Expenses</button>
+        v-on:click="ResetExpenses()"
+      >Reset {{BudgetCategoryTitle}}</button>
     </span>
+    <br/>
+    <br/>
   </div>
 </template>
 
@@ -74,7 +82,7 @@ class ExpenseItem {
     budgetPrice: string,
     template: boolean,
     budgetTypeId: number,
-    budgetType : Object
+    budgetType: Object
   ) {
     this.Id = id;
     this.ExpenseTitle = expenseTitle;
@@ -88,26 +96,45 @@ class ExpenseItem {
   ExpenseTitle: string = "";
   BudgetPrice: string = "";
   Template: boolean = false;
-  BudgetTypeId: number = 4;
-  BudgetType : Object = {Id: 4, Type: "Household"}
+  BudgetTypeId: number = 0;
+  BudgetType: Object = { };
   //  ourChartData = planetChartData;
 }
 
 @Component
-export default class HouseholdandPersonalExpenses extends MyMixin {
+export default class BudgetCategoryExpense extends MyMixin {
   constructor() {
     super();
   }
 
+  @Prop()
+  BudgetCategoryTitle!: string;
+
+  @Prop()
+  IdentifiedBudgetCategoryId!: number;
+
   AddNewCustomExpense() {
     this.$store.commit(
       "AddNewCustomExpense",
-      new ExpenseItem(Math.round(Math.random() * 1000), "", "", false, 4, {Id: 4, Type: "Household"})
+      new ExpenseItem(
+        Math.round(Math.random() * 1000),
+        "",
+        "",
+        false,
+        this.IdentifiedBudgetCategoryId,
+        {}
+      )
     );
   }
 
+  get IdTitle(): string {
+    return this.BudgetCategoryTitle.trim().replace(/\s/g,'') + Math.round(Math.random() * 1000);
+  }
+
   get CalculateTotal(): number {
-    var objectArrayTotal = this.$store.getters.CalculateHouseholdExpensesTotal;
+    var objectArrayTotal = this.$store.getters.CalculateSelectedExpensesTotal(
+      this.IdentifiedBudgetCategoryId
+    );
     this.$emit("inputData", objectArrayTotal);
     return objectArrayTotal;
   }
@@ -116,8 +143,11 @@ export default class HouseholdandPersonalExpenses extends MyMixin {
     this.$store.commit("RemoveCustomExpenseItem", item);
   }
 
-  ResetHouseholdandPersonalExpenses() {
-this.$store.commit("ResetHouseholdandPersonalExpenses");
+  ResetExpenses() {
+    this.$store.commit(
+      "ResetSelectedExpenses",
+      this.IdentifiedBudgetCategoryId
+    );
   }
 }
 </script>

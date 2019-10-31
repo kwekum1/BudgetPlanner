@@ -44,7 +44,8 @@
     <div class="row" v-show="!chartViewOnly">
       <div class="col-lg-1"></div>
       <div class="col-lg-4">
-        <housing-expenses @inputData="updateHousing" />
+       <!-- <housing-expenses @inputData="updateHousing" /> -->
+        <budget-category-expense @inputData="updateHousing" :BudgetCategoryTitle="'Housing Expenses'" :IdentifiedBudgetCategoryId="1" />
         <transportation-expenses @inputData="updateTransportation" />
         <br />
         <br />
@@ -73,7 +74,8 @@
       </div>
       <div class="col-lg-3">
         <healthcare-insurance-expenses @inputData="updateHealth" />
-        <household-personal-expenses @inputData="updateHousehold" />
+        <!--<household-personal-expenses @inputData="updateHousehold" /> -->
+        <budget-category-expense @inputData="updateHousehold" :BudgetCategoryTitle="'Household and Personal Expenses'" :IdentifiedBudgetCategoryId="4" />
       </div>
       <div class="col-lg-3">
         <discretionary-expenses @inputData="updateDiscretionary" />
@@ -88,14 +90,15 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
-import HousingExpenses from "@/components/HousingExpenses.vue";
+//import HousingExpenses from "@/components/HousingExpenses.vue";
 import TransportationExpenses from "@/components/TransportationExpenses.vue";
 import HealthcareInsuranceExpenses from "@/components/HealthcareInsuranceExpenses.vue";
-import HouseholdPersonalExpenses from "@/components/HouseholdPersonalExpenses.vue";
+//import HouseholdPersonalExpenses from "@/components/HouseholdPersonalExpenses.vue";
 import DiscretionaryExpenses from "@/components/DiscretionaryExpenses.vue";
 import SavingAndInvestingExpenses from "@/components/SavingAndInvesting.vue";
 import chart from "@/components/chart.vue";
 import ChartDisplay from "@/components/ChartDisplay.vue";
+import BudgetCategoryExpense from "@/components/BudgetCategoryExpense.vue";
 //import store from "@/store/index.ts";
 
 export default {
@@ -204,12 +207,13 @@ export default {
   },
   components: {
     TransportationExpenses,
-    HousingExpenses,
+    //HousingExpenses,
     HealthcareInsuranceExpenses,
-    HouseholdPersonalExpenses,
+   // HouseholdPersonalExpenses,
     DiscretionaryExpenses,
     SavingAndInvestingExpenses,
-    ChartDisplay
+    ChartDisplay,
+    BudgetCategoryExpense
   },
   methods: {
     updateLabels(labels) {

@@ -1,14 +1,54 @@
 import Vue from "vue";
 import Vuex, { Store } from "vuex";
-import {version} from "../../package.json";
+import { version } from "../../package.json";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     version: "",
-    message: "Kweku Daddy",
-    HouseholdExpenses: [
+    message: "Budget Implementation System",
+    Expenses: [
+      {
+        Id: 1,
+        ExpenseTitle: "Mortgage/Rent",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 1,
+        BudgetType: { Id: 1, Type: "Housing" }
+      },
+      {
+        Id: 2,
+        ExpenseTitle: "Property Taxes",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 1,
+        BudgetType: { Id: 1, Type: "Housing" }
+      },
+      {
+        Id: 3,
+        ExpenseTitle: "Home Maintence",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 1,
+        BudgetType: { Id: 1, Type: "Housing" }
+      },
+      {
+        Id: 4,
+        ExpenseTitle: "Home Owners Insurance",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 1,
+        BudgetType: { Id: 1, Type: "Housing" }
+      },
+      {
+        Id: 5,
+        ExpenseTitle: "Home Utilities",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 1,
+        BudgetType: { Id: 1, Type: "Housing" }
+      },     
       {
         Id: 1,
         ExpenseTitle: "Groceries",
@@ -19,7 +59,7 @@ export default new Vuex.Store({
       },
       {
         Id: 2,
-        ExpenseTitle: "PersonalCare",
+        ExpenseTitle: "Personal Care",
         BudgetPrice: "",
         Template: true,
         BudgetTypeId: 4,
@@ -27,7 +67,7 @@ export default new Vuex.Store({
       },
       {
         Id: 3,
-        ExpenseTitle: "ClothingAndDryCleaning",
+        ExpenseTitle: "Clothing And Dry Cleaning",
         BudgetPrice: "",
         Template: true,
         BudgetTypeId: 4,
@@ -35,7 +75,7 @@ export default new Vuex.Store({
       },
       {
         Id: 4,
-        ExpenseTitle: "ProfessionalDues",
+        ExpenseTitle: "Professional Dues",
         BudgetPrice: "",
         Template: true,
         BudgetTypeId: 4,
@@ -43,7 +83,7 @@ export default new Vuex.Store({
       },
       {
         Id: 5,
-        ExpenseTitle: "CellPhone",
+        ExpenseTitle: "Cell Phone",
         BudgetPrice: "",
         Template: true,
         BudgetTypeId: 4,
@@ -60,26 +100,16 @@ export default new Vuex.Store({
     ]
   },
   mutations: {
-    AddNewCustomExpense(state) {
-      state.HouseholdExpenses.push({
-        Id: Math.round(Math.random() * 1000),
-        ExpenseTitle: "",
-        BudgetPrice: "",
-        Template: false,
-        BudgetTypeId: 4,
-        BudgetType: { Id: 4, Type: "Household" }
-      });
-    },
-
-    AddNewCustomExpenseItem(state, newItem) {
-      state.HouseholdExpenses.push(newItem);
+    AddNewCustomExpense(state, newItem) {
+      state.Expenses.push(newItem);
     },
     initialiseStore(state) {
       //alert('Initializing Local Storage')
       // Check if the ID exists
       if (localStorage.getItem("BudgetStoreStateInformation")) {
-        let store =
-        JSON.parse(localStorage.getItem("BudgetStoreStateInformation") || "{}");
+        let store = JSON.parse(
+          localStorage.getItem("BudgetStoreStateInformation") || "{}"
+        );
 
         if (store.version == version) {
           this.replaceState(Object.assign(state, store));
@@ -88,15 +118,19 @@ export default new Vuex.Store({
         }
       }
     },
-    ResetHouseholdandPersonalExpenses(state) {
-      for (var index = 0; index < state.HouseholdExpenses.length; ++index) {
-        state.HouseholdExpenses[index].BudgetPrice = "";
+    ResetSelectedExpenses(state, categoryTypeId) {
+      var resetItems = state.Expenses.filter(function(u) {
+        return u.BudgetTypeId === categoryTypeId;
+      });
+
+      for (var index = 0; index < resetItems.length; ++index) {
+        resetItems[index].BudgetPrice = "";
       }
     },
     RemoveCustomExpenseItem(state, removedItem) {
-      for (var i = 0; i < state.HouseholdExpenses.length; i++) {
-        if (state.HouseholdExpenses[i] === removedItem) {
-          state.HouseholdExpenses.splice(i, 1);
+      for (var i = 0; i < state.Expenses.length; i++) {
+        if (state.Expenses[i] === removedItem) {
+          state.Expenses.splice(i, 1);
           i--;
         }
       }
@@ -108,20 +142,24 @@ export default new Vuex.Store({
       return state.message.toUpperCase();
     },
     count(state) {
-      return state.HouseholdExpenses.length;
+      return state.Expenses.length;
     },
-    TemplateBudgetExpenses: state => {
-      return state.HouseholdExpenses.filter(function(u) {
-        return u.Template;
+    TemplateBudgetExpenses: state => (categoryTypeId: number) => {
+      return state.Expenses.filter(function(u) {
+        return u.Template && u.BudgetTypeId === categoryTypeId;
       });
     },
-    UserBudgetExpenses: state => {
-      return state.HouseholdExpenses.filter(function(u) {
-        return !u.Template;
+    UserBudgetExpenses: state => (categoryTypeId: number) => {
+      return state.Expenses.filter(function(u) {
+        return !u.Template && u.BudgetTypeId === categoryTypeId;
       });
     },
-    CalculateHouseholdExpensesTotal(state) {
-      var objectArrayTotal = state.HouseholdExpenses.reduce(function(a, b) {
+    CalculateSelectedExpensesTotal: state => (categoryTypeId: number) => {
+      var selectedCategorySpending = state.Expenses.filter(function(u) {
+        return u.BudgetTypeId === categoryTypeId;
+      });
+
+      var objectArrayTotal = selectedCategorySpending.reduce(function(a, b) {
         var budgetNumber = b.BudgetPrice;
         var amount;
         if (Number.isNaN(Number.parseFloat(budgetNumber))) amount = 0;
