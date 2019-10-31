@@ -7,7 +7,7 @@
           <label>Auto Payments</label>
         </td>
         <td>
-          <input class="form-control" v-model="AutoPayments" />
+          <input type="number" class="form-control" v-model="AutoPayments" />
         </td>
       </tr>
       <tr>
@@ -15,7 +15,7 @@
           <label>Auto Insurance</label>
         </td>
         <td>
-          <input class="form-control" v-model="AutoInsurance" />
+          <input type="number" class="form-control" v-model="AutoInsurance" />
         </td>
       </tr>
       <tr>
@@ -23,7 +23,7 @@
           <label>Gas</label>
         </td>
         <td>
-          <input class="form-control" v-model="Gas" />
+          <input type="number" class="form-control" v-model="Gas" />
         </td>
       </tr>
       <tr>
@@ -31,7 +31,7 @@
           <label>Maintenance/License</label>
         </td>
         <td>
-          <input class="form-control" v-model="MaintenanceLicense" />
+          <input type="number" class="form-control" v-model="MaintenanceLicense" />
         </td>
       </tr>
       <tr>
@@ -39,12 +39,12 @@
           <label>Parking/Tolls/Bus/Train</label>
         </td>
         <td>
-          <input class="form-control" v-model="ParkingTollsBusTrain" />
+          <input type="number" class="form-control" v-model="ParkingTollsBusTrain" />
         </td>
       </tr>
       <tr>
         <td>
-          <input placeholder="Other (Text In Value)" />
+          <input type="number" placeholder="Other (Text In Value)" />
         </td>
         <td>
           <input class="form-control" v-model="Other" />

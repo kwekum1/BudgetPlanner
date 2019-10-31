@@ -2,54 +2,40 @@
   <div class="HouseholdandPersonalExpenses">
     <h3>Household and Personal Expenses</h3>
     <table class="table table-striped">
-      <tr v-for="item in TemplateBudgetExpenses" v-bind:key="item.Id">
+      <tr v-for="item in $store.getters.TemplateBudgetExpenses" v-bind:key="item.Id">
         <td>{{ item.ExpenseTitle }}</td>
         <td>
-          <input
-            class="form-control"
-            type="number"
-            v-model="item.BudgetPrice"
-          />
+          <input class="form-control" type="number" v-model="item.BudgetPrice" />
         </td>
       </tr>
-      <tr v-for="item in UserBudgetExpenses" v-bind:key="item.Id">
+      <tr v-for="item in $store.getters.UserBudgetExpenses" v-bind:key="item.Id">
         <td>
           <input placeholder="(Name of Expense)" v-model="item.ExpenseTitle" />
         </td>
         <td>
-          <input
-            class="form-control"
-            type="number"
-            v-model="item.BudgetPrice"
-          />
+          <input class="form-control" type="number" v-model="item.BudgetPrice" />
         </td>
         <td>
-          <font-awesome-icon
-            v-on:click="RemoveItem(item)"
-            style="cursor: pointer"
-            icon="trash"
-          />
+          <font-awesome-icon v-on:click="RemoveItem(item)" style="cursor: pointer" icon="trash" />
         </td>
       </tr>
-      <tr v-if="UserBudgetExpenses.length < 3">
+      <tr v-if="$store.getters.UserBudgetExpenses.length < 3">
         <td>
-          <button v-on:click="AddNewCustomExpense()">
-            Add additional expense
-          </button>
+          <button v-on:click="AddNewCustomExpense()">Add additional expense</button>
         </td>
       </tr>
     </table>
 
     <span>
-      <b style="padding-right:2em; font-size: 2em">{{
+      <b style="padding-right:2em; font-size: 2em">
+        {{
         CalculateTotal | toCurrency
-      }}</b>
+        }}
+      </b>
       <button
         class="btn btn-light btn-sm"
         v-on:click="ResetHouseholdandPersonalExpenses()"
-      >
-        Reset Household Expenses
-      </button>
+      >Reset Household Expenses</button>
     </span>
   </div>
 </template>
@@ -86,18 +72,24 @@ class ExpenseItem {
     id: number,
     expenseTitle: string,
     budgetPrice: string,
-    template: boolean
+    template: boolean,
+    budgetTypeId: number,
+    budgetType : Object
   ) {
     this.Id = id;
     this.ExpenseTitle = expenseTitle;
     this.BudgetPrice = budgetPrice;
     this.Template = template;
+    this.BudgetType = budgetType;
+    this.BudgetTypeId = budgetTypeId;
   }
 
   Id: number = 0;
   ExpenseTitle: string = "";
   BudgetPrice: string = "";
   Template: boolean = false;
+  BudgetTypeId: number = 4;
+  BudgetType : Object = {Id: 4, Type: "Household"}
   //  ourChartData = planetChartData;
 }
 
@@ -105,71 +97,27 @@ class ExpenseItem {
 export default class HouseholdandPersonalExpenses extends MyMixin {
   constructor() {
     super();
-    this.HouseholdExpenses.push(new ExpenseItem(1, "Groceries", "", true));
-    this.HouseholdExpenses.push(new ExpenseItem(2, "PersonalCare", "", true));
-    this.HouseholdExpenses.push(
-      new ExpenseItem(3, "ClothingAndDryCleaning", "", true)
-    );
-    this.HouseholdExpenses.push(
-      new ExpenseItem(4, "ProfessionalDues", "", true)
-    );
-    this.HouseholdExpenses.push(new ExpenseItem(5, "CellPhone", "", true));
-    this.HouseholdExpenses.push(new ExpenseItem(6, "Other", "", true));
-  }
-
-  public HouseholdExpenses: ExpenseItem[] = [];
-  NewCount: number = 30;
-
-  get TemplateBudgetExpenses(): ExpenseItem[] {
-    return this.HouseholdExpenses.filter(function(u) {
-      return u.Template;
-    });
-  }
-
-  get UserBudgetExpenses(): ExpenseItem[] {
-    return this.HouseholdExpenses.filter(function(u) {
-      return !u.Template;
-    });
   }
 
   AddNewCustomExpense() {
-    //  this.createChart('planet-chart', planetChartData);
-    this.HouseholdExpenses.push(
-      new ExpenseItem(Math.round(Math.random() * 1000), "", "", false)
+    this.$store.commit(
+      "AddNewCustomExpense",
+      new ExpenseItem(Math.round(Math.random() * 1000), "", "", false, 4, {Id: 4, Type: "Household"})
     );
   }
 
-  // @Watch("HouseholdExpenses")
-  // onPropertyChanged(value: string, oldValue: string) {
-  // Do stuff with the watcher here.r
-  //}
-
   get CalculateTotal(): number {
-    var objectArrayTotal = this.HouseholdExpenses.reduce(function(a, b) {
-      var budgetNumber = b.BudgetPrice;
-      var amount;
-      if (Number.isNaN(Number.parseFloat(budgetNumber))) amount = 0;
-      else amount = Number.parseFloat(budgetNumber);
-      return a + +amount;
-    }, 0);
-
+    var objectArrayTotal = this.$store.getters.CalculateHouseholdExpensesTotal;
     this.$emit("inputData", objectArrayTotal);
     return objectArrayTotal;
   }
 
   RemoveItem(item: ExpenseItem) {
-    for (var i = 0; i < this.HouseholdExpenses.length; i++) {
-      if (this.HouseholdExpenses[i] === item) {
-        this.HouseholdExpenses.splice(i, 1);
-        i--;
-      }
-    }
+    this.$store.commit("RemoveCustomExpenseItem", item);
   }
 
   ResetHouseholdandPersonalExpenses() {
-    for (var index = 0; index < this.HouseholdExpenses.length; ++index) {
-      this.HouseholdExpenses[index].BudgetPrice = "";
-    }
+this.$store.commit("ResetHouseholdandPersonalExpenses");
   }
 }
 </script>

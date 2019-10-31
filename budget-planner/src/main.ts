@@ -8,6 +8,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faUserSecret } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
+
 library.add(faUserSecret);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
@@ -37,8 +38,19 @@ Vue.mixin({
   }
 });
 
+
 new Vue({
   router,
   store,
+  beforeCreate() {
+		this.$store.commit('initialiseStore');
+	},
   render: h => h(App)
 }).$mount("#app");
+
+store.subscribe((mutation, state) => {
+	// Store the state object as a JSON string
+ // alert('mutation occured; Setting the state');
+  	// Store the state object as a JSON string
+	localStorage.setItem('BudgetStoreStateInformation', JSON.stringify(state));
+});

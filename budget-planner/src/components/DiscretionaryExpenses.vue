@@ -7,7 +7,7 @@
           <label>Cable/Phone/Internet</label>
         </td>
         <td>
-          <input class="form-control" v-model="CablePhoneInternet" />
+          <input type="number" class="form-control" v-model="CablePhoneInternet" />
         </td>
       </tr>
       <tr>
@@ -15,7 +15,7 @@
           <label>Dining Out</label>
         </td>
         <td>
-          <input class="form-control" v-model="DiningOut" />
+          <input type="number" class="form-control" v-model="DiningOut" />
         </td>
       </tr>
       <tr>
@@ -23,7 +23,7 @@
           <label>Recreation Club Dues</label>
         </td>
         <td>
-          <input class="form-control" v-model="RecClubDues" />
+          <input type="number" class="form-control" v-model="RecClubDues" />
         </td>
       </tr>
       <tr>
@@ -31,7 +31,7 @@
           <label>Movies/Sporting Events</label>
         </td>
         <td>
-          <input class="form-control" v-model="MoviesAndEvents" />
+          <input type="number" class="form-control" v-model="MoviesAndEvents" />
         </td>
       </tr>
       <tr>
@@ -39,7 +39,7 @@
           <label>Hobbies</label>
         </td>
         <td>
-          <input class="form-control" v-model="Hobbies" />
+          <input type="number" class="form-control" v-model="Hobbies" />
         </td>
       </tr>
       <tr>
@@ -47,7 +47,7 @@
           <label>Vacation/Travel</label>
         </td>
         <td>
-          <input class="form-control" v-model="Vacay" />
+          <input type="number" class="form-control" v-model="Vacay" />
         </td>
       </tr>
       <tr>
@@ -55,7 +55,7 @@
           <label>Gifts/Contributions</label>
         </td>
         <td>
-          <input class="form-control" v-model="Gifts" />
+          <input type="number" class="form-control" v-model="Gifts" />
         </td>
       </tr>
       <tr>
@@ -63,7 +63,7 @@
           <label>Misc.</label>
         </td>
         <td>
-          <input class="form-control" v-model="Misc" />
+          <input type="number" class="form-control" v-model="Misc" />
         </td>
       </tr>
       <tr>

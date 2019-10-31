@@ -12,7 +12,7 @@
               <label>Emergency Fund</label>
             </td>
             <td>
-              <input class="form-control" v-model="EmergencyFund" />
+              <input type="number" class="form-control" v-model="EmergencyFund" />
             </td>
           </tr>
           <tr>
@@ -20,7 +20,7 @@
               <label>College Savings</label>
             </td>
             <td>
-              <input class="form-control" v-model="CollegeSavings" />
+              <input type="number" class="form-control" v-model="CollegeSavings" />
             </td>
           </tr>
           <tr>

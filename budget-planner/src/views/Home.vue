@@ -2,9 +2,10 @@
   <div class="home container-fluid">
     <img alt="Vue logo" src="../assets/logo.png" />
     <h1>Total: {{ totalBudgetCost | toCurrency }}</h1>
+    <button v-on:click="chartViewOnly = !chartViewOnly">Toggle Chart View</button>
     <!--<HelloWorld msg="Welcome to Your Vue.js Application" />-->
     <div class="row">
-      <div class="col-lg-4">
+      <div v-bind:class="{'col-lg-4' : !chartViewOnly, 'col-lg-6' : chartViewOnly}">
         <chart-display
           :charttype="pieChartType"
           :displayType="moneyDisplayType"
@@ -12,7 +13,7 @@
           :chartdata="computedChartData"
         />
       </div>
-      <div class="col-lg-4">
+      <div v-bind:class="{'col-lg-4' : !chartViewOnly, 'col-lg-6' : chartViewOnly}">
         <chart-display
           :charttype="barChartType"
           :displayType="moneyDisplayType"
@@ -20,7 +21,7 @@
           :chartdata="computedChartData"
         />
       </div>
-      <div class="col-lg-4">
+      <div v-bind:class="{'col-lg-4' : !chartViewOnly, 'col-lg-6' : chartViewOnly}">
         <chart-display
           :charttype="polarAreaChartType"
           :displayType="percentDisplayType"
@@ -29,22 +30,18 @@
         />
       </div>
     </div>
-    <div class="row">
+    <div class="row" v-show="!chartViewOnly">
       <div class="col-lg-1" />
       <div class="col-lg-7">
-        <div class="alert alert-primary text-left">
-          Essential Expenses (60%)
-        </div>
+        <div class="alert alert-primary text-left">Essential Expenses (60%)</div>
       </div>
       <div class="col-lg-3">
-        <div class="alert alert-info text-left">
-          Discretionary Expenses (20%)
-        </div>
+        <div class="alert alert-info text-left">Discretionary Expenses (20%)</div>
       </div>
       <div class="col-lg-1" />
     </div>
 
-    <div class="row">
+    <div class="row" v-show="!chartViewOnly">
       <div class="col-lg-1"></div>
       <div class="col-lg-4">
         <housing-expenses @inputData="updateHousing" />
@@ -99,11 +96,13 @@ import DiscretionaryExpenses from "@/components/DiscretionaryExpenses.vue";
 import SavingAndInvestingExpenses from "@/components/SavingAndInvesting.vue";
 import chart from "@/components/chart.vue";
 import ChartDisplay from "@/components/ChartDisplay.vue";
+//import store from "@/store/index.ts";
 
 export default {
   name: "home",
   data() {
     return {
+      chartViewOnly: false,
       pieChartType: "Pie",
       barChartType: "Bar",
       polarAreaChartType: "PolarArea",
@@ -120,6 +119,9 @@ export default {
     };
   },
   computed: {
+    message() {
+      return this.$store.getters.count;
+    },
     generateIncomeComparsions: function() {
       var ArrayOfPercentages = [0, 0, 0, 0, 0, 0];
       if (

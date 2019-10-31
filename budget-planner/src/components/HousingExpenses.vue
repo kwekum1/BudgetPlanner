@@ -7,7 +7,7 @@
           <label>Mortgage/Rent</label>
         </td>
         <td>
-          <input class="form-control" v-model="MortgageRent" />
+          <input type="number" class="form-control" v-model="MortgageRent" />
         </td>
       </tr>
       <tr>
@@ -15,7 +15,7 @@
           <label>Property Taxes</label>
         </td>
         <td>
-          <input class="form-control" v-model="PropertyTaxes" />
+          <input type="number" class="form-control" v-model="PropertyTaxes" />
         </td>
       </tr>
       <tr>
@@ -23,7 +23,7 @@
           <label>Home Maintence</label>
         </td>
         <td>
-          <input class="form-control" v-model="HomeMaintence" />
+          <input type="number" class="form-control" v-model="HomeMaintence" />
         </td>
       </tr>
       <tr>
@@ -31,7 +31,7 @@
           <label>Home Owners Insurance</label>
         </td>
         <td>
-          <input class="form-control" v-model="HomeOwnersInsurance" />
+          <input type="number" class="form-control" v-model="HomeOwnersInsurance" />
         </td>
       </tr>
       <tr>
@@ -39,7 +39,7 @@
           <label>Home Utilities</label>
         </td>
         <td>
-          <input class="form-control" v-model="HomeUtilities" />
+          <input type="number" class="form-control" v-model="HomeUtilities" />
         </td>
       </tr>
     </table>
