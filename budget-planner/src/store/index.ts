@@ -48,7 +48,87 @@ export default new Vuex.Store({
         Template: true,
         BudgetTypeId: 1,
         BudgetType: { Id: 1, Type: "Housing" }
-      },     
+      },
+      {
+        Id: 1,
+        ExpenseTitle: "Auto Payments",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 2,
+        BudgetType: { Id: 2, Type: "Transportation" }
+      },    
+      {
+        Id: 2,
+        ExpenseTitle: "Auto Insurance",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 2,
+        BudgetType: { Id: 2, Type: "Transportation" }
+      },    
+      {
+        Id: 3,
+        ExpenseTitle: "Gas",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 2,
+        BudgetType: { Id: 2, Type: "Transportation" }
+      },    
+      {
+        Id: 4,
+        ExpenseTitle: "Maintenance/License",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 2,
+        BudgetType: { Id: 2, Type: "Transportation" }
+      },    
+      {
+        Id: 5,
+        ExpenseTitle: "Parking/Tolls/Bus/Train",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 2,
+        BudgetType: { Id: 2, Type: "Transportation" }
+      }, 
+      {
+        Id: 1,
+        ExpenseTitle: "Health Insurance",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 3,
+        BudgetType: { Id: 3, Type: "Healthcare" }
+      },  
+      {
+        Id: 2,
+        ExpenseTitle: "Life Insurance",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 3,
+        BudgetType: { Id: 3, Type: "Healthcare" }
+      },  
+      {
+        Id: 3,
+        ExpenseTitle: "Disability Income Insurance",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 3,
+        BudgetType: { Id: 3, Type: "Healthcare" }
+      },
+      {
+        Id: 4,
+        ExpenseTitle: "Long-term Care Insurance",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 3,
+        BudgetType: { Id: 3, Type: "Healthcare" }
+      },      
+      {
+        Id: 5,
+        ExpenseTitle: "Medical/Dental/Drugs",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 3,
+        BudgetType: { Id: 3, Type: "Healthcare" }
+      },            
       {
         Id: 1,
         ExpenseTitle: "Groceries",
@@ -90,12 +170,68 @@ export default new Vuex.Store({
         BudgetType: { Id: 4, Type: "Household" }
       },
       {
-        Id: 6,
-        ExpenseTitle: "Other",
+        Id: 1,
+        ExpenseTitle: "Cable/Phone/Internet",
         BudgetPrice: "",
         Template: true,
-        BudgetTypeId: 4,
-        BudgetType: { Id: 4, Type: "Household" }
+        BudgetTypeId: 5,
+        BudgetType: { Id: 5, Type: "Discretionary" }
+      },
+      {
+        Id: 2,
+        ExpenseTitle: "Dining Out",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 5,
+        BudgetType: { Id: 5, Type: "Discretionary" }
+      },
+      {
+        Id: 3,
+        ExpenseTitle: "Recreation Club Dues",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 5,
+        BudgetType: { Id: 5, Type: "Discretionary" }
+      },
+      {
+        Id: 4,
+        ExpenseTitle: "Movies/Sporting Events",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 5,
+        BudgetType: { Id: 5, Type: "Discretionary" }
+      },
+      {
+        Id: 5,
+        ExpenseTitle: "Hobbies",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 5,
+        BudgetType: { Id: 5, Type: "Discretionary" }
+      },
+      {
+        Id: 6,
+        ExpenseTitle: "Vacation/Travel",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 5,
+        BudgetType: { Id: 5, Type: "Discretionary" }
+      },
+      {
+        Id: 7,
+        ExpenseTitle: "Gifts/Contributions",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 5,
+        BudgetType: { Id: 5, Type: "Discretionary" }
+      },
+      {
+        Id: 8,
+        ExpenseTitle: "Misc.",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 5,
+        BudgetType: { Id: 5, Type: "Discretionary" }
       }
     ]
   },
@@ -140,6 +276,9 @@ export default new Vuex.Store({
   getters: {
     message(state) {
       return state.message.toUpperCase();
+    },
+    getVersion(state) {
+      return state.version;
     },
     count(state) {
       return state.Expenses.length;

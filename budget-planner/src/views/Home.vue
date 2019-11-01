@@ -1,8 +1,14 @@
 <template>
   <div class="home container-fluid">
+    <p><i>Version {{message}}</i></p>
     <img alt="Vue logo" src="../assets/logo.png" />
-    <h1>Total: {{ totalBudgetCost | toCurrency }}</h1>
+    <h1>Total Budget Spending: {{ totalBudgetCost | toCurrency }}</h1>
+    <h1>Total Spending After Income: {{ totalSurplusDeficit | toCurrency }}</h1>
+    <hr/>
+    <br/>
     <button v-on:click="chartViewOnly = !chartViewOnly">Toggle Chart View</button>
+    <br/>
+        <br/>
     <!--<HelloWorld msg="Welcome to Your Vue.js Application" />-->
     <div class="row">
       <div v-bind:class="{'col-lg-4' : !chartViewOnly, 'col-lg-6' : chartViewOnly}">
@@ -28,15 +34,16 @@
           :chartlabels="chartLabelsToDisplay"
           :chartdata="generateIncomeComparsions"
         />
+        <br/>
       </div>
     </div>
     <div class="row" v-show="!chartViewOnly">
       <div class="col-lg-1" />
       <div class="col-lg-7">
-        <div class="alert alert-primary text-left">Essential Expenses (60%)</div>
+        <div class="alert alert-primary text-left">Recommended Essential Expenses (60%)<span v-if="incomeInput"> | Actual Percentage {{getEssentialExpensesSpendingPercentage}}%</span></div>
       </div>
       <div class="col-lg-3">
-        <div class="alert alert-info text-left">Discretionary Expenses (20%)</div>
+        <div class="alert alert-info text-left">Discretionary Expenses (20%)<span v-if="incomeInput"> | Actual Percentage {{getDiscretionarySpendingPercentage}}%</span></div>
       </div>
       <div class="col-lg-1" />
     </div>
@@ -44,9 +51,8 @@
     <div class="row" v-show="!chartViewOnly">
       <div class="col-lg-1"></div>
       <div class="col-lg-4">
-       <!-- <housing-expenses @inputData="updateHousing" /> -->
         <budget-category-expense @inputData="updateHousing" :BudgetCategoryTitle="'Housing Expenses'" :IdentifiedBudgetCategoryId="1" />
-        <transportation-expenses @inputData="updateTransportation" />
+        <budget-category-expense @inputData="updateTransportation" :BudgetCategoryTitle="'Transportation Expenses'" :IdentifiedBudgetCategoryId="2" />
         <br />
         <br />
         <hr />
@@ -73,14 +79,15 @@
         </div>
       </div>
       <div class="col-lg-3">
-        <healthcare-insurance-expenses @inputData="updateHealth" />
-        <!--<household-personal-expenses @inputData="updateHousehold" /> -->
+        <budget-category-expense @inputData="updateHealth" :BudgetCategoryTitle="'Healthcare/Insurance Expenses'" :IdentifiedBudgetCategoryId="3" />
         <budget-category-expense @inputData="updateHousehold" :BudgetCategoryTitle="'Household and Personal Expenses'" :IdentifiedBudgetCategoryId="4" />
       </div>
       <div class="col-lg-3">
-        <discretionary-expenses @inputData="updateDiscretionary" />
+        <budget-category-expense @inputData="updateDiscretionary" :BudgetCategoryTitle="'Discretionary Expenses'" :IdentifiedBudgetCategoryId="5" />
         <br />
         <saving-and-investing-expenses @inputData="updateSavings" />
+        <br/>
+        <br/>
       </div>
       <div class="col-lg-1"></div>
     </div>
@@ -90,16 +97,10 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
-//import HousingExpenses from "@/components/HousingExpenses.vue";
-import TransportationExpenses from "@/components/TransportationExpenses.vue";
-import HealthcareInsuranceExpenses from "@/components/HealthcareInsuranceExpenses.vue";
-//import HouseholdPersonalExpenses from "@/components/HouseholdPersonalExpenses.vue";
-import DiscretionaryExpenses from "@/components/DiscretionaryExpenses.vue";
 import SavingAndInvestingExpenses from "@/components/SavingAndInvesting.vue";
 import chart from "@/components/chart.vue";
 import ChartDisplay from "@/components/ChartDisplay.vue";
 import BudgetCategoryExpense from "@/components/BudgetCategoryExpense.vue";
-//import store from "@/store/index.ts";
 
 export default {
   name: "home",
@@ -123,7 +124,18 @@ export default {
   },
   computed: {
     message() {
-      return this.$store.getters.count;
+      return this.$store.getters.getVersion;
+    },
+    getEssentialExpensesSpendingPercentage() {
+      return (((+this.HousingExpensesAmount + +this.TransportationExpensesAmount + 
+      +this.HealthcareInsuranceExpensesAmount + +this.HouseholdPersonalExpensesAmount)/+this.totalBudgetCost) *
+          100
+        ).toFixed(2);
+    },
+    getDiscretionarySpendingPercentage() {
+      return (((+this.DiscretionaryExpensesAmount)/+this.totalBudgetCost) *
+          100
+        ).toFixed(2);
     },
     generateIncomeComparsions: function() {
       var ArrayOfPercentages = [0, 0, 0, 0, 0, 0];
@@ -206,11 +218,6 @@ export default {
     }
   },
   components: {
-    TransportationExpenses,
-    //HousingExpenses,
-    HealthcareInsuranceExpenses,
-   // HouseholdPersonalExpenses,
-    DiscretionaryExpenses,
     SavingAndInvestingExpenses,
     ChartDisplay,
     BudgetCategoryExpense
