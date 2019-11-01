@@ -56,7 +56,6 @@ new Vue({
     this.$store.watch(
       (state, getters) => state.incomeInput,
       (newValue, oldValue) => {  
-        window.console.log(`THis is the new valiue ${newValue} compared to the old ${oldValue}`);
         localStorage.setItem('BudgetStoreStateInformation', JSON.stringify(store.state));
       },
     );

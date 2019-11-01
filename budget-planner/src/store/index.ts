@@ -227,12 +227,36 @@ export default new Vuex.Store({
         BudgetType: { Id: 5, Type: "Discretionary" }
       },
       {
-        Id: 8,
-        ExpenseTitle: "Misc.",
+        Id: 1,
+        ExpenseTitle: "Emergency Fund",
         BudgetPrice: "",
         Template: true,
-        BudgetTypeId: 5,
-        BudgetType: { Id: 5, Type: "Discretionary" }
+        BudgetTypeId: 6,
+        BudgetType: { Id: 6, Type: "Savings" }
+      },
+      {
+        Id: 2,
+        ExpenseTitle: "College Savings",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 6,
+        BudgetType: { Id: 6, Type: "Savings" }
+      },
+      {
+        Id: 3,
+        ExpenseTitle: "Short/Mid-Term Needs",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 6,
+        BudgetType: { Id: 6, Type: "Savings" }
+      },
+      {
+        Id: 4,
+        ExpenseTitle: "Retirement Savings",
+        BudgetPrice: "",
+        Template: true,
+        BudgetTypeId: 6,
+        BudgetType: { Id: 6, Type: "Savings" }
       }
     ]
   },

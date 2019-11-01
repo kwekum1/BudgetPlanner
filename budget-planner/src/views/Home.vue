@@ -4,14 +4,14 @@
     <h1>Welcome to the Budget Planner</h1>
     <h2>"If you fail to plan, you plan to fail"</h2>
     <h2>Use this tool to help you plan out a working monthly budget</h2>
-    <br/>
+    <br />
     <h3>Total Budget Spending: {{ totalBudgetCost | toCurrency }}</h3>
     <h3>Total Spending After Income: {{ totalSurplusDeficit | toCurrency }}</h3>
-    <hr/>
-    <br/>
+    <hr />
+    <br />
     <button v-on:click="chartViewOnly = !chartViewOnly">Toggle Chart View</button>
-    <br/>
-        <br/>
+    <br />
+    <br />
     <!--<HelloWorld msg="Welcome to Your Vue.js Application" />-->
     <div class="row">
       <div v-bind:class="{'col-lg-4' : !chartViewOnly, 'col-lg-6' : chartViewOnly}">
@@ -37,16 +37,26 @@
           :chartlabels="chartLabelsToDisplay"
           :chartdata="generateIncomeComparsions"
         />
-        <br/>
+        <br />
       </div>
     </div>
     <div class="row" v-show="!chartViewOnly">
       <div class="col-lg-1" />
       <div class="col-lg-7">
-        <div class="alert alert-primary text-left">Recommended Essential Expenses (60%)<span v-if="$store.state.incomeInput && totalBudgetCost"> | Actual Percentage {{getEssentialExpensesSpendingPercentage}}%</span></div>
+        <div class="alert alert-primary text-left">
+          Recommended Max Essential Expenses (60%)
+          <span
+            v-if="$store.state.incomeInput && totalBudgetCost"
+          >| Actual Percentage {{getEssentialExpensesSpendingPercentage}}%</span>
+        </div>
       </div>
       <div class="col-lg-3">
-        <div class="alert alert-info text-left">Discretionary Expenses (20%)<span v-if="$store.state.incomeInput && totalBudgetCost"> | Actual Percentage {{getDiscretionarySpendingPercentage}}%</span></div>
+        <div class="alert alert-info text-left">
+          Max Discretionary Expenses (20%)
+          <span
+            v-if="$store.state.incomeInput && totalBudgetCost"
+          >| Actual Percentage {{getDiscretionarySpendingPercentage}}%</span>
+        </div>
       </div>
       <div class="col-lg-1" />
     </div>
@@ -54,8 +64,16 @@
     <div class="row" v-show="!chartViewOnly">
       <div class="col-lg-1"></div>
       <div class="col-lg-4">
-        <budget-category-expense @inputData="updateHousing" :BudgetCategoryTitle="'Housing Expenses'" :IdentifiedBudgetCategoryId="1" />
-        <budget-category-expense @inputData="updateTransportation" :BudgetCategoryTitle="'Transportation Expenses'" :IdentifiedBudgetCategoryId="2" />
+        <budget-category-expense
+          @inputData="updateHousing"
+          :BudgetCategoryTitle="'Housing Expenses'"
+          :IdentifiedBudgetCategoryId="1"
+        />
+        <budget-category-expense
+          @inputData="updateTransportation"
+          :BudgetCategoryTitle="'Transportation Expenses'"
+          :IdentifiedBudgetCategoryId="2"
+        />
         <br />
         <br />
         <hr />
@@ -82,20 +100,51 @@
         </div>
       </div>
       <div class="col-lg-3">
-        <budget-category-expense @inputData="updateHealth" :BudgetCategoryTitle="'Healthcare/Insurance Expenses'" :IdentifiedBudgetCategoryId="3" />
-        <budget-category-expense @inputData="updateHousehold" :BudgetCategoryTitle="'Household and Personal Expenses'" :IdentifiedBudgetCategoryId="4" />
+        <budget-category-expense
+          @inputData="updateHealth"
+          :BudgetCategoryTitle="'Healthcare/Insurance Expenses'"
+          :IdentifiedBudgetCategoryId="3"
+        />
+        <budget-category-expense
+          @inputData="updateHousehold"
+          :BudgetCategoryTitle="'Household and Personal Expenses'"
+          :IdentifiedBudgetCategoryId="4"
+        />
       </div>
       <div class="col-lg-3">
-        <budget-category-expense @inputData="updateDiscretionary" :BudgetCategoryTitle="'Discretionary Expenses'" :IdentifiedBudgetCategoryId="5" />
+        <budget-category-expense
+          @inputData="updateDiscretionary"
+          :BudgetCategoryTitle="'Discretionary Expenses'"
+          :IdentifiedBudgetCategoryId="5"
+        />
         <br />
-        <saving-and-investing-expenses @inputData="updateSavings" />
-        <br/>
-        <br/>
+        <div class="card">
+          <div class="card-header bg-warning">
+            <h3>Saving And Investing</h3>
+            <h6>
+              (Min 20%)
+              <span
+                v-if="$store.state.incomeInput && totalBudgetCost"
+              >| Actual Percentage {{getSavingsPercentage}}%</span>
+            </h6>
+          </div>
+          <div class="card-body">
+            <budget-category-expense
+              @inputData="updateSavings"
+              :BudgetCategoryTitle="''"
+              :IdentifiedBudgetCategoryId="6"
+            />
+          </div>
+        </div>
+        <br />
+        <br />
       </div>
       <div class="col-lg-1"></div>
     </div>
     <footer>
-          <p><i>Version {{message}}</i></p>
+      <p>
+        <i>Version {{message}}</i>
+      </p>
     </footer>
   </div>
 </template>
@@ -103,7 +152,6 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
-import SavingAndInvestingExpenses from "@/components/SavingAndInvesting.vue";
 import chart from "@/components/chart.vue";
 import ChartDisplay from "@/components/ChartDisplay.vue";
 import BudgetCategoryExpense from "@/components/BudgetCategoryExpense.vue";
@@ -133,15 +181,26 @@ export default {
       return this.$store.getters.getVersion;
     },
     getEssentialExpensesSpendingPercentage() {
-      return (((+this.HousingExpensesAmount + +this.TransportationExpensesAmount + 
-      +this.HealthcareInsuranceExpensesAmount + +this.HouseholdPersonalExpensesAmount)/+this.totalBudgetCost) *
-          100
-        ).toFixed(2);
+      return (
+        ((+this.HousingExpensesAmount +
+          +this.TransportationExpensesAmount +
+          +this.HealthcareInsuranceExpensesAmount +
+          +this.HouseholdPersonalExpensesAmount) /
+          +this.totalBudgetCost) *
+        100
+      ).toFixed(2);
     },
     getDiscretionarySpendingPercentage() {
-      return (((+this.DiscretionaryExpensesAmount)/+this.totalBudgetCost) *
-          100
-        ).toFixed(2);
+      return (
+        (+this.DiscretionaryExpensesAmount / +this.totalBudgetCost) *
+        100
+      ).toFixed(2);
+    },
+    getSavingsPercentage() {
+      return (
+        (+this.SavingAndInvestingAmount / +this.totalBudgetCost) *
+        100
+      ).toFixed(2);
     },
     generateIncomeComparsions: function() {
       var ArrayOfPercentages = [0, 0, 0, 0, 0, 0];
@@ -158,15 +217,18 @@ export default {
         ).toFixed(2);
 
         var healthcarePct = (
-          (+this.HealthcareInsuranceExpensesAmount / +this.$store.state.incomeInput) *
+          (+this.HealthcareInsuranceExpensesAmount /
+            +this.$store.state.incomeInput) *
           100
         ).toFixed(2);
         var transportationPct = (
-          (+this.TransportationExpensesAmount / +this.$store.state.incomeInput) *
+          (+this.TransportationExpensesAmount /
+            +this.$store.state.incomeInput) *
           100
         ).toFixed(2);
         var householdPct = (
-          (+this.HouseholdPersonalExpensesAmount / +this.$store.state.incomeInput) *
+          (+this.HouseholdPersonalExpensesAmount /
+            +this.$store.state.incomeInput) *
           100
         ).toFixed(2);
         var discretionaryPct = (
@@ -224,7 +286,6 @@ export default {
     }
   },
   components: {
-    SavingAndInvestingExpenses,
     ChartDisplay,
     BudgetCategoryExpense
   },
