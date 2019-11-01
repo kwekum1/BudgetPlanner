@@ -7,6 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     version: "",
+    incomeInput: "",
     message: "Budget Implementation System",
     Expenses: [
       {
@@ -280,8 +281,8 @@ export default new Vuex.Store({
     getVersion(state) {
       return state.version;
     },
-    count(state) {
-      return state.Expenses.length;
+    AllExpenses(state) {
+      return state.Expenses.reduce((total, n) => total + +n.BudgetPrice, 0);
     },
     TemplateBudgetExpenses: state => (categoryTypeId: number) => {
       return state.Expenses.filter(function(u) {

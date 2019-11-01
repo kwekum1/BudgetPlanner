@@ -1,9 +1,12 @@
 <template>
   <div class="home container-fluid">
-    <p><i>Version {{message}}</i></p>
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <h1>Total Budget Spending: {{ totalBudgetCost | toCurrency }}</h1>
-    <h1>Total Spending After Income: {{ totalSurplusDeficit | toCurrency }}</h1>
+    <!-- <img alt="Vue logo" src="../assets/logo.png" /> -->
+    <h1>Welcome to the Budget Planner</h1>
+    <h2>"If you fail to plan, you plan to fail"</h2>
+    <h2>Use this tool to help you plan out a working monthly budget</h2>
+    <br/>
+    <h3>Total Budget Spending: {{ totalBudgetCost | toCurrency }}</h3>
+    <h3>Total Spending After Income: {{ totalSurplusDeficit | toCurrency }}</h3>
     <hr/>
     <br/>
     <button v-on:click="chartViewOnly = !chartViewOnly">Toggle Chart View</button>
@@ -40,10 +43,10 @@
     <div class="row" v-show="!chartViewOnly">
       <div class="col-lg-1" />
       <div class="col-lg-7">
-        <div class="alert alert-primary text-left">Recommended Essential Expenses (60%)<span v-if="incomeInput"> | Actual Percentage {{getEssentialExpensesSpendingPercentage}}%</span></div>
+        <div class="alert alert-primary text-left">Recommended Essential Expenses (60%)<span v-if="$store.state.incomeInput && totalBudgetCost"> | Actual Percentage {{getEssentialExpensesSpendingPercentage}}%</span></div>
       </div>
       <div class="col-lg-3">
-        <div class="alert alert-info text-left">Discretionary Expenses (20%)<span v-if="incomeInput"> | Actual Percentage {{getDiscretionarySpendingPercentage}}%</span></div>
+        <div class="alert alert-info text-left">Discretionary Expenses (20%)<span v-if="$store.state.incomeInput && totalBudgetCost"> | Actual Percentage {{getDiscretionarySpendingPercentage}}%</span></div>
       </div>
       <div class="col-lg-1" />
     </div>
@@ -63,7 +66,7 @@
           <input
             class="text-line"
             placeholder="(Insert Here)"
-            v-model="incomeInput"
+            v-model="$store.state.incomeInput"
           />
         </p>
         <hr />
@@ -91,6 +94,9 @@
       </div>
       <div class="col-lg-1"></div>
     </div>
+    <footer>
+          <p><i>Version {{message}}</i></p>
+    </footer>
   </div>
 </template>
 
@@ -140,35 +146,35 @@ export default {
     generateIncomeComparsions: function() {
       var ArrayOfPercentages = [0, 0, 0, 0, 0, 0];
       if (
-        this.incomeInput &&
-        this.incomeInput > 0 &&
-        !isNaN(this.incomeInput)
+        this.$store.state.incomeInput &&
+        this.$store.state.incomeInput > 0 &&
+        !isNaN(this.$store.state.incomeInput)
       ) {
         ArrayOfPercentages = [];
 
         var housingPct = (
-          (+this.HousingExpensesAmount / +this.incomeInput) *
+          (+this.HousingExpensesAmount / +this.$store.state.incomeInput) *
           100
         ).toFixed(2);
 
         var healthcarePct = (
-          (+this.HealthcareInsuranceExpensesAmount / +this.incomeInput) *
+          (+this.HealthcareInsuranceExpensesAmount / +this.$store.state.incomeInput) *
           100
         ).toFixed(2);
         var transportationPct = (
-          (+this.TransportationExpensesAmount / +this.incomeInput) *
+          (+this.TransportationExpensesAmount / +this.$store.state.incomeInput) *
           100
         ).toFixed(2);
         var householdPct = (
-          (+this.HouseholdPersonalExpensesAmount / +this.incomeInput) *
+          (+this.HouseholdPersonalExpensesAmount / +this.$store.state.incomeInput) *
           100
         ).toFixed(2);
         var discretionaryPct = (
-          (+this.DiscretionaryExpensesAmount / +this.incomeInput) *
+          (+this.DiscretionaryExpensesAmount / +this.$store.state.incomeInput) *
           100
         ).toFixed(2);
         var SavingAndInvestingPct = (
-          (+this.SavingAndInvestingAmount / +this.incomeInput) *
+          (+this.SavingAndInvestingAmount / +this.$store.state.incomeInput) *
           100
         ).toFixed(2);
         ArrayOfPercentages.push(housingPct);
@@ -204,7 +210,7 @@ export default {
       );
     },
     totalSurplusDeficit: function() {
-      return +this.incomeInput - +this.totalBudgetCost;
+      return +this.$store.state.incomeInput - +this.totalBudgetCost;
     },
     computedChartData: function() {
       return [

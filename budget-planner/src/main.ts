@@ -44,13 +44,32 @@ new Vue({
   store,
   beforeCreate() {
 		this.$store.commit('initialiseStore');
-	},
+  },
+  created() {
+    this.$store.watch(
+      (state, getters) => getters.AllExpenses,
+      (newValue, oldValue) => {  
+        localStorage.setItem('BudgetStoreStateInformation', JSON.stringify(store.state));
+      },
+    );
+    
+    this.$store.watch(
+      (state, getters) => state.incomeInput,
+      (newValue, oldValue) => {  
+        window.console.log(`THis is the new valiue ${newValue} compared to the old ${oldValue}`);
+        localStorage.setItem('BudgetStoreStateInformation', JSON.stringify(store.state));
+      },
+    );
+    
+    this.$store.subscribe((mutation, state) => {
+      // Store the state object as a JSON string
+     // alert('mutation occured; Setting the state');
+        // Store the state object as a JSON string
+      localStorage.setItem('BudgetStoreStateInformation', JSON.stringify(state));
+    });
+    
+
+  },
   render: h => h(App)
 }).$mount("#app");
 
-store.subscribe((mutation, state) => {
-	// Store the state object as a JSON string
- // alert('mutation occured; Setting the state');
-  	// Store the state object as a JSON string
-	localStorage.setItem('BudgetStoreStateInformation', JSON.stringify(state));
-});
