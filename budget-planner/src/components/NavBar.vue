@@ -24,7 +24,7 @@
               <router-link to="/About" class="nav-link">About</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/CalendarHistory" class="nav-link">Track The Spending!</router-link>
+              <router-link to="/CalendarHistory" v-if="$auth.isAuthenticated && !$auth.loading" class="nav-link">Track The Spending!</router-link>
             </li>
           </ul>
           <ul class="navbar-nav d-none d-md-block">
