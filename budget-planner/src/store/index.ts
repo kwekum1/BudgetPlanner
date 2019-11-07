@@ -9,6 +9,14 @@ export default new Vuex.Store({
     version: "",
     incomeInput: "",
     message: "Budget Implementation System",
+    ExpenseTypes: [
+      { Id: 1, Type: "Housing", HexColor:  "#f87979" },
+      { Id: 2, Type: "Transportation", HexColor: "#8987b9"},
+      { Id: 3, Type: "Healthcare", HexColor: "#29b527"},
+      { Id: 4, Type: "Household/Personal", HexColor: "#45729e"},
+      { Id: 5, Type: "Discretionary", HexColor: "#d6ad24"},
+      { Id: 6, Type: "Savings", HexColor: "#73d3e4"}
+    ],
     Expenses: [
       {
         Id: 1,
@@ -57,7 +65,7 @@ export default new Vuex.Store({
         Template: true,
         BudgetTypeId: 2,
         BudgetType: { Id: 2, Type: "Transportation" }
-      },    
+      },
       {
         Id: 2,
         ExpenseTitle: "Auto Insurance",
@@ -65,7 +73,7 @@ export default new Vuex.Store({
         Template: true,
         BudgetTypeId: 2,
         BudgetType: { Id: 2, Type: "Transportation" }
-      },    
+      },
       {
         Id: 3,
         ExpenseTitle: "Gas",
@@ -73,7 +81,7 @@ export default new Vuex.Store({
         Template: true,
         BudgetTypeId: 2,
         BudgetType: { Id: 2, Type: "Transportation" }
-      },    
+      },
       {
         Id: 4,
         ExpenseTitle: "Maintenance/License",
@@ -81,7 +89,7 @@ export default new Vuex.Store({
         Template: true,
         BudgetTypeId: 2,
         BudgetType: { Id: 2, Type: "Transportation" }
-      },    
+      },
       {
         Id: 5,
         ExpenseTitle: "Parking/Tolls/Bus/Train",
@@ -89,7 +97,7 @@ export default new Vuex.Store({
         Template: true,
         BudgetTypeId: 2,
         BudgetType: { Id: 2, Type: "Transportation" }
-      }, 
+      },
       {
         Id: 1,
         ExpenseTitle: "Health Insurance",
@@ -97,7 +105,7 @@ export default new Vuex.Store({
         Template: true,
         BudgetTypeId: 3,
         BudgetType: { Id: 3, Type: "Healthcare" }
-      },  
+      },
       {
         Id: 2,
         ExpenseTitle: "Life Insurance",
@@ -105,7 +113,7 @@ export default new Vuex.Store({
         Template: true,
         BudgetTypeId: 3,
         BudgetType: { Id: 3, Type: "Healthcare" }
-      },  
+      },
       {
         Id: 3,
         ExpenseTitle: "Disability Income Insurance",
@@ -121,7 +129,7 @@ export default new Vuex.Store({
         Template: true,
         BudgetTypeId: 3,
         BudgetType: { Id: 3, Type: "Healthcare" }
-      },      
+      },
       {
         Id: 5,
         ExpenseTitle: "Medical/Dental/Drugs",
@@ -129,7 +137,7 @@ export default new Vuex.Store({
         Template: true,
         BudgetTypeId: 3,
         BudgetType: { Id: 3, Type: "Healthcare" }
-      },            
+      },
       {
         Id: 1,
         ExpenseTitle: "Groceries",
@@ -301,6 +309,9 @@ export default new Vuex.Store({
   getters: {
     message(state) {
       return state.message.toUpperCase();
+    },
+    GetBudgetTypes(state) {
+      return state.ExpenseTypes;
     },
     getVersion(state) {
       return state.version;
