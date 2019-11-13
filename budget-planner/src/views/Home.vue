@@ -6,7 +6,7 @@
     <h2>Use this tool to help you plan out a working monthly budget</h2>
     <br />
     <h3>Total Budget Spending: {{ totalBudgetCost | toCurrency }}</h3>
-    <h3>Total Spending After Income: {{ totalSurplusDeficit | toCurrency }}</h3>
+    <h3>Total Surplus/Deficit After Budget: {{ totalSurplusDeficit | toCurrency }}</h3>
     <hr />
     <br />
     <button v-on:click="chartViewOnly = !chartViewOnly">Toggle Chart View</button>
@@ -68,6 +68,7 @@
           @inputData="updateHousing"
           :BudgetCategoryTitle="'Housing Expenses'"
           :IdentifiedBudgetCategoryId="1"
+          :HeadingDetails="'(a household should spend a maximum of 28-30% of its gross monthly income on total housing expenses)'"
         />
         <budget-category-expense
           @inputData="updateTransportation"
@@ -110,6 +111,12 @@
           :BudgetCategoryTitle="'Household and Personal Expenses'"
           :IdentifiedBudgetCategoryId="4"
         />
+        <br />
+        <br />
+        <button
+          v-on:click="SetDefinedBudgetOffOfIncome"
+          class="btn btn-primary"
+        >Pre-set A Standard budget based off Income</button>
       </div>
       <div class="col-lg-3">
         <budget-category-expense
@@ -155,6 +162,7 @@ import HelloWorld from "@/components/HelloWorld.vue";
 import chart from "@/components/chart.vue";
 import ChartDisplay from "@/components/ChartDisplay.vue";
 import BudgetCategoryExpense from "@/components/BudgetCategoryExpense.vue";
+import moment from "moment";
 
 export default {
   name: "home",
@@ -316,6 +324,17 @@ export default {
       if (Number.isNaN(Number.parseFloat(CaptureNumber))) amount = 0;
       else amount = Number.parseFloat(CaptureNumber);
       return amount;
+    },
+    SetDefinedBudgetOffOfIncome() {
+      if (
+        this.$store.state.incomeInput &&
+        this.$store.state.incomeInput > 0 &&
+        !isNaN(this.$store.state.incomeInput)
+      ) {
+        this.$store.commit("SetDefinedBudgetOffOfIncome", this.$store.getters);
+      } else {
+        alert("You must input an income amount");
+      }
     },
     RetrieveStandardLabels() {
       return [

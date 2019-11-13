@@ -1,6 +1,8 @@
 <template>
   <div v-bind:id="IdTitle" class="ExpensesCharter">
     <h3>{{BudgetCategoryTitle}}</h3>
+    <h6 v-if="BudgetRecommendation && NumberActual">Recommended: {{BudgetRecommendation}}% | Actual: {{NumberActual}}%</h6>
+    <h6 v-if="HeadingDetails">{{HeadingDetails}}</h6>
     <table class="table table-striped">
       <tr
         v-for="item in $store.getters.TemplateBudgetExpenses(IdentifiedBudgetCategoryId)"
@@ -111,7 +113,16 @@ export default class BudgetCategoryExpense extends MyMixin {
   BudgetCategoryTitle!: string;
 
   @Prop()
+  BudgetRecommendation!: number;
+
+  @Prop()
+  NumberActual!: number;
+
+  @Prop()
   IdentifiedBudgetCategoryId!: number;
+
+  @Prop()
+  HeadingDetails!: string;
 
   AddNewCustomExpense() {
     this.$store.commit(
