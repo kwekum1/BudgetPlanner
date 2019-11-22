@@ -5,17 +5,28 @@
         <h2>Your current spending status as of today</h2>
         <hr />
         <div v-bind:key="option.Id" v-for="option in dataForBudgetTypes">
-          <h4 v-bind:style="{ 'background-color': option.HexColor, color: 'white'}">{{option.Type}}</h4>
+          <h4
+            v-bind:style="{
+              'background-color': option.HexColor,
+              color: 'white'
+            }"
+          >
+            {{ option.Type }}
+          </h4>
           <hr />
-          Total Spent: {{GetBudgetStatByCategory(option.Id) | toCurrency}}
+          Total Spent: {{ GetBudgetStatByCategory(option.Id) | toCurrency }}
           <br />
-          Remaining Budget for Month: {{GetRemainingBudgetStatByCategory(option.Id) | toCurrency}}
+          Remaining Budget for Month:
+          {{ GetRemainingBudgetStatByCategory(option.Id) | toCurrency }}
           <br />Status:
-          <b v-if="GetRemainingBudgetStatByCategory(option.Id) > -1">Good Budgeting</b>
+          <b v-if="GetRemainingBudgetStatByCategory(option.Id) >= 0.0"
+            >Good Budgeting</b
+          >
           <b
             style="color: red"
-            v-if="GetRemainingBudgetStatByCategory(option.Id) < 0"
-          >You are over budget!</b>
+            v-if="GetRemainingBudgetStatByCategory(option.Id) < 0.0"
+            >You are over budget!</b
+          >
           <br />
           <br />
         </div>
@@ -43,8 +54,10 @@
         <div class="modal-content">
           <!-- Modal Header -->
           <div class="modal-header">
-            <h4 class="modal-title">Add event for {{dateForAddingEvent}}</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add event for {{ NewAppEvent.date }}</h4>
+            <button type="button" class="close" data-dismiss="modal">
+              &times;
+            </button>
           </div>
 
           <!-- Modal body -->
@@ -90,12 +103,17 @@
                   <label>Select Spending Category</label>
                 </td>
                 <td>
-                  <select class="form-control" required v-model="NewAppEvent.propExpenseType">
+                  <select
+                    class="form-control"
+                    required
+                    v-model="NewAppEvent.propExpenseType"
+                  >
                     <option
                       v-for="option in dataForBudgetTypes"
                       v-bind:key="option.Id"
                       v-bind:value="option"
-                    >{{ option.Type }}</option>
+                      >{{ option.Type }}</option
+                    >
                   </select>
                 </td>
               </tr>
@@ -104,14 +122,28 @@
 
           <!-- Modal footer -->
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" v-on:click="AddNewEvent">Save</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              v-on:click="AddNewEvent"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
             <button
               v-if="NewAppEvent.propTitle"
               type="button"
               class="btn btn-danger"
               data-dismiss="modal"
-            >Delete this Event</button>
+            >
+              Delete this Event
+            </button>
           </div>
         </div>
       </div>
@@ -120,11 +152,10 @@
   </div>
 </template>
 
-<style lang='scss'>
+<style lang="scss">
 @import "~@fullcalendar/core/main.css";
 @import "~@fullcalendar/daygrid/main.css";
 </style>
-
 
 <script>
 // @ is an alias to /src
@@ -143,52 +174,51 @@ export default {
         arg.event &&
         arg.event.extendedProps &&
         arg.event.extendedProps.propAppExpense
-      ) {
-        this.NewAppEvent = arg.event.extendedProps.propAppExpense;
+      ) 
+      {
+                this.ResetForm();
+        this.NewAppEvent.Id = arg.event.extendedProps.Id;
+        this.NewAppEvent.date = arg.event.extendedProps.date;
+        this.NewAppEvent.propExpenseType = arg.event.extendedProps.propExpenseType;
+        this.NewAppEvent.propCost = arg.event.extendedProps.propCost;
+        this.NewAppEvent.propTitle = arg.event.extendedProps.propTitle;
+        this.NewAppEvent.color = arg.event.extendedProps.color;
+
+
+        window.console.log("Event Clicked; Showing extendprops");
+        window.console.log(arg.event.extendedProps);
         $("#myModal").modal();
       } else {
+        this.ResetForm();
         let calendarApi = this.$refs.fullCalendar.getApi();
         calendarApi.gotoDate(arg.dateStr);
-        this.dateForAddingEvent = arg.dateStr;
+        this.NewAppEvent.date = arg.dateStr;
         $("#myModal").modal();
       }
     },
     handleMonthChange: function(arg) {
       var CalendarStart = arg.view.currentStart;
       var check = moment(CalendarStart, "YYYY/MM/DD");
-      var selectedMonthOnCalendarYear = check.format("YYYY");
-      var selectedMonthOnCalendarFirstDate = check.format("YYYY-MM-DD"); //first of the month date 2019-11-01
-      var currentDate = moment().format("YYYY-MM-DD"); // current date
-      var selectedMonthOnCalendarAsNumber = check.format("M"); // 11
-      var TodayMonthAsNumber = moment().format("M");
-      var TodayMonthsFirstDate = moment(
-        new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-      ).format("YYYY-MM-DD");
+      this.selectedMonthOnCalendarYear = check.format("YYYY");
+      //var selectedMonthOnCalendarFirstDate = check.format("YYYY-MM-DD"); //first of the month date 2019-11-01
+      //var currentDate = moment().format("YYYY-MM-DD"); // current date
+      this.selectedMonthOnCalendarAsNumber = check.format("M"); // 11
+      // var TodayMonthAsNumber = moment().format("M");
+      // var TodayMonthsFirstDate = moment(
+      // new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+      //).format("YYYY-MM-DD");
+
+      this.UpdateBudgetCompareData();
 
       //   if (selectedMonthOnCalendarFirstDate < TodayMonthsFirstDate) {
-      var lastDayOfMonthOnCalendar = moment(
+      /*  var lastDayOfMonthOnCalendar = moment(
         new Date(
           selectedMonthOnCalendarYear,
           selectedMonthOnCalendarAsNumber - 1 + 1,
           0
         )
       ).format("YYYY-MM-DD");
-
-      var gettersForStoreUse = this.$store.getters;
-      this.BudgetCompareData = this.$store.getters.CalculateAllCalendarExpenseTotals(
-        gettersForStoreUse,
-        new Date(
-          selectedMonthOnCalendarYear,
-          selectedMonthOnCalendarAsNumber - 1,
-          1
-        ),
-        new Date(
-          selectedMonthOnCalendarYear,
-          selectedMonthOnCalendarAsNumber,
-          0
-        )
-      );
-      //     }
+      */ //     }
 
       //working on here
       //this.$store.commit("UpdateAsOfDateBudgetDifference", {currentMonth, gettersForStoreUse});
@@ -202,25 +232,65 @@ export default {
         var newItemExpense = {
           title: `${this.NewAppEvent.propCost} - ${this.NewAppEvent.propTitle}`,
           color: `${this.NewAppEvent.propExpenseType.HexColor}`,
-          date: this.dateForAddingEvent,
-          textColor: "white",
-          propAppExpense: this.NewAppEvent
+          date: this.NewAppEvent.date,
+          propTitle: this.NewAppEvent.propTitle,
+          propCost: this.NewAppEvent.propCost,
+          textColor: "white"
         };
 
-        this.$store.commit("AddNewCalendarExpense", newItemExpense);
-        var t = this.$store.getters.CalculateCalendarExpenseTotals(1);
-        // window.console.log(FullCalendar.props.now);
+        this.NewAppEvent.title = `${this.NewAppEvent.propCost} - ${this.NewAppEvent.propTitle}`;
+        this.NewAppEvent.color = `${this.NewAppEvent.propExpenseType.HexColor}`;
+        this.NewAppEvent.propAppExpense = this.NewAppEvent.propExpenseType;
+        this.NewAppEvent.propExpenseType = this.NewAppEvent.propExpenseType;
+        //this.NewAppEvent
+
+        if (!this.NewAppEvent.Id) {
+          newItemExpense.Id = +this.$store.getters.GetMaxIdOfAllExpenses + 1;
+          this.NewAppEvent.Id = newItemExpense.Id;
+          this.$store.commit("AddNewCalendarExpense", this.NewAppEvent);
+        } else {
+          newItemExpense.Id = this.NewAppEvent.Id;
+          newItemExpense.color = this.NewAppEvent.color;
+          newItemExpense.propTitle = this.NewAppEvent.propTitle;
+          newItemExpense.date = this.NewAppEvent.date;
+          newItemExpense.propCost = this.NewAppEvent.propCost;
+          newItemExpense.title = `${this.NewAppEvent.propCost} - ${this.NewAppEvent.propTitle}`;
+          newItemExpense.propExpenseType = this.NewAppEvent.propExpenseType;
+          newItemExpense.textColor = this.NewAppEvent.textColor;
+          newItemExpense.propAppExpense = this.NewAppEvent;
+          window.console.log(
+            "Item getting ready to edit: " + JSON.stringify(newItemExpense)
+          );
+          this.$store.commit("EditCalendarExpense", newItemExpense);
+          window.console.log(this.CalendarExpenseEvents);
+        }
 
         //use to save info
         //this.$auth.user.email;
         //this.$auth.user.sub;
+        this.UpdateBudgetCompareData();
         this.ResetForm();
         this.errors = [];
         $("#myModal").modal("hide");
       }
     },
+    UpdateBudgetCompareData() {
+      var gettersForStoreUse = this.$store.getters;
+      this.BudgetCompareData = this.$store.getters.CalculateAllCalendarExpenseTotals(
+        gettersForStoreUse,
+        new Date(
+          this.selectedMonthOnCalendarYear,
+          this.selectedMonthOnCalendarAsNumber - 1,
+          1
+        ),
+        new Date(
+          this.selectedMonthOnCalendarYear,
+          this.selectedMonthOnCalendarAsNumber,
+          0
+        )
+      );
+    },
     GetBudgetStatByCategory(Id) {
-      
       let obj = this.BudgetCompareData.find(o => o.Id === Id);
 
       if (obj) {
@@ -235,7 +305,15 @@ export default {
       } else return 0;
     },
     ResetForm() {
-      this.NewAppEvent = { Id: "", propCost: "", propTitle: "", propExpenseType: "" };      
+      this.NewAppEvent = {
+        Id: "",
+        propCost: "",
+        title: "",
+        date: "",
+        propTitle: "",
+        propExpenseType: "",
+        propAppExpense: ""
+      };
     },
     validateNewEntry() {
       this.errors = [];
@@ -247,13 +325,15 @@ export default {
       }
       if (
         this.NewAppEvent.propCost.charAt(0) !== "$" &&
-        (isNaN(this.NewAppEvent.propCost) || this.NewAppEvent.propCost === "true")
+        (isNaN(this.NewAppEvent.propCost) ||
+          this.NewAppEvent.propCost === "true")
       ) {
         this.errors.push("Cost Must be a number");
       }
       if (
         this.NewAppEvent.propCost.charAt(0) === "$" &&
-        (isNaN(this.NewAppEvent.propCost.substr(1)) || this.NewAppEvent.propCost === "true")
+        (isNaN(this.NewAppEvent.propCost.substr(1)) ||
+          this.NewAppEvent.propCost === "true")
       ) {
         this.errors.push("Cost Must be a number");
       }
@@ -267,12 +347,22 @@ export default {
   },
   data() {
     return {
+      selectedMonthOnCalendarYear: "",
+      selectedMonthOnCalendarAsNumber: "",
       NewTitle: "",
       NewCost: "",
-      NewAppEvent: { Id: "", propCost: "", propTitle: "", propExpenseType: "" },
+      NewAppEvent: {
+        Id: "",
+        propCost: "",
+        propTitle: "",
+        propExpenseType: "",
+        propAppExpense: "",
+        title: "",
+        color: "",
+        date: ""
+      },
       BudgetCompareData: [],
       calendarPlugins: [dayGridPlugin, interactionPlugin],
-      dateForAddingEvent: "",
       dataForBudgetTypes: this.$store.getters.GetBudgetTypes,
       selectedBudgetType: "",
       CalendarExpenseEvents: this.$store.getters.GetAllCalendarEvents,

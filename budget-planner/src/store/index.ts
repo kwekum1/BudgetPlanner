@@ -11,11 +11,14 @@ export default new Vuex.Store({
     message: "Budget Implementation System",
     CalendarExpenseEvents: [
       {
+        Id: 0,
         title: "",
         color: "",
         date: "",
         textColor: "",
         propCost: "",
+        propTitle: "",
+        propExpenseType: { Id: 0 },
         propAppExpense: { Id: 0, propCost: "", propExpenseType: { Id: 0 } }
       }
     ],
@@ -285,6 +288,24 @@ export default new Vuex.Store({
     AddNewCalendarExpense(state, newItem) {
       state.CalendarExpenseEvents.push(newItem);
     },
+    EditCalendarExpense(state, editItem) {
+      var ItemToEdit = state.CalendarExpenseEvents.filter(function(u) {
+        if (u.Id === editItem.Id)
+        {
+          u.title = editItem.title;
+          u.propCost = editItem.propCost;
+          u.propTitle = editItem.propTitle;
+          u.color =  editItem.color;
+          u.propExpenseType = editItem.propExpenseType;
+          u.propAppExpense = editItem.propAppExpense;
+        }
+      });
+
+      ItemToEdit = editItem;
+
+      window.console.log(ItemToEdit);
+
+    },
     initialiseStore(state) {
       //alert('Initializing Local Storage')
       // Check if the ID exists
@@ -479,7 +500,9 @@ export default new Vuex.Store({
       DiscretionaryBudgetItems[6].BudgetPrice = GiftsBudget.toFixed(2);
 
       //Remaining Discretionary Budget
-      var RemainingDiscretionaryAmount = +DiscretionaryExpensesBudget - +getters.CalculateSelectedExpensesTotal(5);
+      var RemainingDiscretionaryAmount =
+        +DiscretionaryExpensesBudget -
+        +getters.CalculateSelectedExpensesTotal(5);
 
       //Savings Amount
       var EmergencyFundBudget = +SavingsBudget * 0.31;
@@ -529,6 +552,14 @@ export default new Vuex.Store({
     },
     GetBudgetTypes(state) {
       return state.ExpenseTypes;
+    },
+    GetMaxIdOfAllExpenses(state) {
+      return Math.max.apply(
+        Math,
+        state.CalendarExpenseEvents.map(function(o) {
+          return o.Id;
+        })
+      );
     },
     getVersion(state) {
       return state.version;
@@ -590,8 +621,9 @@ export default new Vuex.Store({
     ) => {
       var selectedCategorySpending = state.CalendarExpenseEvents.filter(
         function(u) {
-          return (
-            u.propAppExpense.propExpenseType.Id === BudgetTypeId &&
+          return (          
+
+            u.propExpenseType.Id === BudgetTypeId &&
             new Date(u.date) <= endDate &&
             new Date(u.date) >= startDate
           );
@@ -599,7 +631,7 @@ export default new Vuex.Store({
       );
 
       var objectArrayTotal = selectedCategorySpending.reduce(function(a, b) {
-        var budgetNumber = b.propAppExpense.propCost;
+        var budgetNumber = b.propCost;
 
         if (budgetNumber.charAt(0) === "$") {
           budgetNumber = budgetNumber.substr(1);
