@@ -17,7 +17,7 @@
     "@fullcalendar/interaction": "^4.3.0",
     "@fullcalendar/vue": "^4.3.1",
     "@types/chart.js": "^2.8.8",
-    "auth0-js": "^9.11.3",
+    "auth0-js": "^9.13.2",
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.8.0",
